@@ -2,7 +2,7 @@ import maya.cmds as cmds
 
 side = "r"
 orientation = "xyz"
-secondaryAxisOrient = "xup"
+secondaryAxisOrient = "zdown"
 chain_types = ["ik", "fk", "bind"]
 locators = cmds.ls(sl=True)
 
