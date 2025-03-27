@@ -17,7 +17,7 @@ Vamos a aplicar, paso a paso,los cambios de la guía "Cómo traducir comandos de
 import maya.cmds as cmds
 ```
 
-2. Agregue prefijo `cmds.` al comando:
+2. Agregue el prefijo `cmds.` a la función:
 
 ```python
 import maya.cmds as cmds
@@ -33,7 +33,7 @@ cmds.polyCube(-w 1 -h 1 -d 1 -sx 1 -sy 1 -sz 1 -ax 0 1 0 -cuv 4 -ch 1);
 cmds.rotate(-r -eu -fo 45 45 45);
 ```
 
-4. Quite el punto y coma (;):
+4. Borre el punto y coma (;):
 
 ```python
 import maya.cmds as cmds
