@@ -1,6 +1,6 @@
 # Ejemplo: Crear manualmente _joints_ y traducir el output de MEL a Python
 
-*MEL:*
+**MEL:**
 ```mel
 // Crea el primer joint. Por defecto, su nombre es `joint1`
 joint -p 0 0 0 ;
@@ -21,7 +21,7 @@ joint -p 0 0 2 ;
 joint -e -zso -oj yzx -sao zup joint2;
 ```
 
-*Python:*
+**Python:**
 ```python
 import maya.cmds as cmds
 
