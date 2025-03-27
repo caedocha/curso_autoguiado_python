@@ -12,7 +12,7 @@ joint -p 0 0 1 ;
 // Para orientar el joint, solamente se especifico en la función el `joint1` pero
 // no el `joint2`. Eso quiere decir que la función `joint` usó el joint que estaba actualmente seleccionado
 // como joint hijo. Como el `joint2` estaba recién creado, ya estaba seleccionado.
-// Note el parámetro `e=True` que hace que la función de joint funcione en modo "Edit".
+// Note el parámetro `-e` que hace que la función de joint funcione en modo "Edit".
 
 joint -e -zso -oj yzx -sao zup joint1;
 
