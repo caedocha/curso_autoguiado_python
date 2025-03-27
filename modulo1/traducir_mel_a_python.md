@@ -1,4 +1,4 @@
-**Ejemplo: polyCube y rotate**
+# Ejemplo: polyCube y rotate**
 
 Este ejemplo muestra cómo traducir un _snippet_ de código de MEL a Python, paso a paso.
 

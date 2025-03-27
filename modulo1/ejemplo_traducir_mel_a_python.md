@@ -1,4 +1,4 @@
-h1. Ejemplo: Crear manualmente _joints_ y traducir el output de MEL a Python
+# Ejemplo: Crear manualmente _joints_ y traducir el output de MEL a Python
 
 *MEL:*
 ```mel
