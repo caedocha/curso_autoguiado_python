@@ -1,7 +1,7 @@
 # Ejemplo: Crear manualmente _joints_ y traducir el output de MEL a Python
 
-En este ejemplo se muestra cómo traducir, de MEL a Python, la creación de una cadena de 3 joints.
-Se asume que el código MEL se obtuvo del _script editor_ luego de haber creado la cadena de joints manualmente.
+En este ejemplo se muestra cómo traducir, de MEL a Python, la creación de una cadena de 3 _joints_.
+Se asume que el código MEL se obtuvo del _script editor_ luego de haber creado la cadena de _joints_ manualmente.
 Ambos ejemplos, el de MEL y el Python, están listos para ser copiados y pegados en el _script editor_ por si desea experimentar con ellos.
 
 **MEL:**
