@@ -17,7 +17,7 @@ Vamos a aplicar, paso a paso,los cambios de la guía "Cómo traducir comandos de
 import maya.cmds as cmds
 ```
 
-2. Agregue el prefijo `cmds.` a la función:
+2. Agregue el prefijo `cmds.` a las funciones:
 
 ```python
 import maya.cmds as cmds
