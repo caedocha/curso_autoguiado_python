@@ -30,7 +30,8 @@ cmds.move(pos_x, 0, 0)
 ## Resta
 ```python
 """
-Este ejemplo es similar al del de suma, se crea un cubo y se mueve. La diferencia es que se movera hacia atras ya que se resta el valor de la posicion.
+Este ejemplo es similar al del de suma, se crea un cubo y se mueve. La diferencia es que se movera hacia atras
+ya que se resta el valor de la posicion.
 """
 
 import maya.cmds as cmds
@@ -81,7 +82,8 @@ cmds.scale(scale, scale, scale)
 ## Multipliación
 ```python
 """
-Este ejemplo es similar al de la división. Se crea un cubo, se agranda y luego se vuelve a agrandar usando la multiplicación.
+Este ejemplo es similar al de la división. Se crea un cubo, se agranda y luego se vuelve
+a agrandar usando la multiplicación.
 Corra este script en 2 partes para ver los efectos de los cambios de escala.
 """
 import maya.cmds as cmds

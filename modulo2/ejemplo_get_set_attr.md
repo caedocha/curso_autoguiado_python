@@ -35,17 +35,21 @@ tz_attribute = ".translateZ"
 cmds.polyCube(name=cube_name)
 cmds.polyCube(name=another_cube_name)
 
-# Se mueve el primer cubo a otra posición, para poder ver una diferencia, cuando se trasfieran los valores de translación de este cubo al otro.
+# Se mueve el primer cubo a otra posición, para poder ver una diferencia,
+# cuando se trasfieran los valores de translación de este cubo al otro.
 cmds.move(5, 2, 8, cube_name)
 
 # La función `cmds.getAttr` permite consultar los valores de los diversos atributos de un objeto.
-# En este caso se concatena el nombre del primer cubo con los 3 atributos de translación para obtener sus valores de translación que se van a guardar en variables.
+# En este caso se concatena el nombre del primer cubo con los 3 atributos de translación para obtener
+# sus valores de translación que se van a guardar en variables.
 cube_tx = cmds.getAttr(cube_name + tx_attribute)
 cube_ty = cmds.getAttr(cube_name + ty_attribute)
 cube_tz = cmds.getAttr(cube_name + tz_attribute)
 
-# Al tener guaradados, en variables, los valores de traslación del primer cubo, se va a usar la función `cmds.setAttr` para cambiar los valores de traslación del segundo cubo.
-# En este caso se concatena el nombre del segundo cubo con los 3 atributos de traslación. Adicionalmente se pasan las variables que tienen los valores de traslación del primer cubo.
+# Al tener guaradados, en variables, los valores de traslación del primer cubo, se va a usar la función `cmds.setAttr`
+# para cambiar los valores de traslación del segundo cubo.
+# En este caso se concatena el nombre del segundo cubo con los 3 atributos de traslación.
+# Adicionalmente se pasan las variables que tienen los valores de traslación del primer cubo.
 cmds.setAttr(another_cube_name + tx_attribute, cube_tx)
 cmds.setAttr(another_cube_name + ty_attribute, cube_ty)
 cmds.setAttr(another_cube_name + tz_attribute, cube_tz)
