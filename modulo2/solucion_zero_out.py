@@ -1,4 +1,8 @@
 """
+****************************************************************************************************
+     TODOS LOS EJEMPLOS Y SOLUCIONES ESTÁN LISTOS PARA COPIAR Y PEGARSE EN EL SCRIPT EDITOR
+****************************************************************************************************
+
 Solución de Zero-Out Simplificado
 Este script hace un "zero out" simplificado al objeto que esté seleccionado.
 Hacer "zero out" se refiere a crear un grupo y transfirle los valores del controlador para que este quede con los valores por defecto de traslación y rotación.

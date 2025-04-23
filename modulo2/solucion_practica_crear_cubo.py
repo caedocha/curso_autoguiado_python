@@ -1,3 +1,8 @@
+"""
+****************************************************************************************************
+     TODOS LOS EJEMPLOS Y SOLUCIONES ESTÁN LISTOS PARA COPIAR Y PEGARSE EN EL SCRIPT EDITOR
+****************************************************************************************************
+"""
 import maya.cmds as cmds
 
 name = "cubo_de_practica"

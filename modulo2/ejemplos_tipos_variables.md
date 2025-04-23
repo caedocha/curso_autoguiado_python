@@ -2,7 +2,15 @@
 
 ## _Strings_ o Cadenas de Caracteres Alfanuméricos
 
+
+
 ```python
+"""
+****************************************************************************************************
+     TODOS LOS EJEMPLOS Y SOLUCIONES ESTÁN LISTOS PARA COPIAR Y PEGARSE EN EL SCRIPT EDITOR
+****************************************************************************************************
+"""
+
 import maya.cmds as cmds
 
 cube_name = "mi_cubito"

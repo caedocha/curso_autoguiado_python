@@ -2,7 +2,12 @@
 
 ```python
 """
-En este ejemplo, se crea un controlador y un grupo sencillo para demostrar el uso de la concatenación para definir nombres de objetos del rig basados en otros objetos.
+****************************************************************************************************
+     TODOS LOS EJEMPLOS Y SOLUCIONES ESTÁN LISTOS PARA COPIAR Y PEGARSE EN EL SCRIPT EDITOR
+****************************************************************************************************
+
+En este ejemplo, se crea un controlador y un grupo sencillo para demostrar el uso de la concatenación
+para definir nombres de objetos del rig basados en otros objetos.
 """
 import maya.cmds as cmds
 

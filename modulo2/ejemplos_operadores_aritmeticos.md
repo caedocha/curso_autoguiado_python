@@ -3,6 +3,10 @@
 ## Suma
 ```python
 """
+****************************************************************************************************
+     TODOS LOS EJEMPLOS Y SOLUCIONES ESTÁN LISTOS PARA COPIAR Y PEGARSE EN EL SCRIPT EDITOR
+****************************************************************************************************
+
 En este ejemplo se crea un cubo y se mueve en el eje X. Luego a ese valor se le suma otro para moverlo un poco más.
 """
 import maya.cmds as cmds

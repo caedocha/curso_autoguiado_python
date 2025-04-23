@@ -12,6 +12,10 @@ Cualquier nodo en el _graph editor_, cualquier _constraint_, cualquier atributo 
 
 ```python
 """
+****************************************************************************************************
+     TODOS LOS EJEMPLOS Y SOLUCIONES ESTÁN LISTOS PARA COPIAR Y PEGARSE EN EL SCRIPT EDITOR
+****************************************************************************************************
+
 En este ejemplo, se demuestra el uso de las funciones `cmds.getAttr` y `cmds.setAttr`.
 Se crean 2 cubos y usando dichas funciones, se consultan los atributos de translación de uno de ellos
 y se le transfieren al otro.
