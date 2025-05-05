@@ -39,7 +39,7 @@ La función para orientar los joints se consiguió al orientar manualmente los j
 el output del script editor.
 """
 
-# La variable donde se van a guardar los nombres de los joints.
+# La variable donde se guardan los nombres de los joints.
 joints = []
 # Las variables para orientar los joints.
 orientation = "yxz"
