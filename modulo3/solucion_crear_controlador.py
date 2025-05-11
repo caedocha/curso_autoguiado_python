@@ -3,7 +3,7 @@
      TODOS LOS EJEMPLOS Y SOLUCIONES ESTÁN LISTOS PARA COPIAR Y PEGARSE EN EL SCRIPT EDITOR
 ****************************************************************************************************
 
-Este ejemplo muestra cómo crear un FK controlador para un joint usando el parámetro `normal(nr)` de `cmds.circle`
+Este ejemplo muestra cómo crear un controlador FK para un joint usando el parámetro `normal(nr)` de `cmds.circle`
 """
 import maya.cmds as cmds
 
