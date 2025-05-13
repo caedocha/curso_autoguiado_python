@@ -3,7 +3,7 @@
      TODOS LOS EJEMPLOS Y SOLUCIONES ESTÁN LISTOS PARA COPIAR Y PEGARSE EN EL SCRIPT EDITOR
 ****************************************************************************************************
 
-Esta solucion muestra cómo crear 3 cadenas de joints IK, FK y BIND en la misma posición de 3 locators creados previamente.
+Esta solución muestra cómo crear 3 cadenas de joints IK, FK y BIND en la misma posición de 3 locators creados previamente.
 Este script asume que los locators están seleccionados antes de correr el script.
 """
 import maya.cmds as cmds
