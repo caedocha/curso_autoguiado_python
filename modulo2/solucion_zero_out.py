@@ -58,12 +58,12 @@ print("Obtained controller's attributes for zeroing out.")
 """
 Transferencia de valores del controlador al grupo usando `cmds.setAttr`
 """
-# Atributos de traslacion
+# Atributos de traslación
 cmds.setAttr(grp_name + tx_attribute, cube_tx)
 cmds.setAttr(grp_name + ty_attribute, cube_ty)
 cmds.setAttr(grp_name + tz_attribute, cube_tz)
 
-# Atributos de rotacion
+# Atributos de rotación
 cmds.setAttr(grp_name + rx_attribute, cube_rx)
 cmds.setAttr(grp_name + ry_attribute, cube_ry)
 cmds.setAttr(grp_name + rz_attribute, cube_rz)
@@ -80,12 +80,12 @@ print("Parented controller under group")
 """
 "Zero-out" de valores de controlador usando `cmds.setAttr`
 """
-# Atributos de traslacion
+# Atributos de traslación
 cmds.setAttr(ctrl + tx_attribute, 0)
 cmds.setAttr(ctrl + ty_attribute, 0)
 cmds.setAttr(ctrl + tz_attribute, 0)
 
-# Atributos de rotacion
+# Atributos de rotación
 cmds.setAttr(ctrl + rx_attribute, 0)
 cmds.setAttr(ctrl + ry_attribute, 0)
 cmds.setAttr(ctrl + rz_attribute, 0)
