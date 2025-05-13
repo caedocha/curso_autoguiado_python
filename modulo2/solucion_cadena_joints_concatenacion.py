@@ -38,7 +38,7 @@ cmds.select(d=True)
 # Resettea la variable contadora.
 jnt_number = 0
 
-# Inicia la creacion de la segunda cadena de joints.
+# Inicia la creación de la segunda cadena de joints.
 # La creación de esta cadena de joints es igual a la anterior, en lo que
 # varía es en el sufijo y las posiciones de los joints.
 jnt = jnt_name + right_suffix + str(jnt_number)
