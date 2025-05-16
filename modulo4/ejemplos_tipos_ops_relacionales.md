@@ -78,6 +78,15 @@ print("Are there any objects selected? " + str(result))
 ****************************************************************************************************
 """
 
+import maya.cmds as cmds
+
+cubito = "mi_cubito"
+cmds.polyCube(name = cubito)
+cmds.move(1,0,0)
+tx = cmds.getAttr(cubito + ".tx")
+result = tx < 1
+
+print("Is mi_cubito's tx less than 1? " + str(result))
 ```
 
 ## Menor o Igual a (<=)
@@ -89,4 +98,13 @@ print("Are there any objects selected? " + str(result))
 ****************************************************************************************************
 """
 
+import maya.cmds as cmds
+
+cubito = "mi_cubito"
+cmds.polyCube(name = cubito)
+cmds.move(1,0,0)
+tx = cmds.getAttr(cubito + ".tx")
+result = tx <= 1
+
+print("Is mi_cubito's tx less than or equal 1? " + str(result))
 ```
