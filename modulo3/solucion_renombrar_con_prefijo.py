@@ -4,10 +4,7 @@
      TODOS LOS EJEMPLOS Y SOLUCIONES ESTÁN LISTOS PARA COPIAR Y PEGARSE EN EL SCRIPT EDITOR
 ****************************************************************************************************
 
-
 Solución de renombrar joints con un prefijo.
-
-
 """
 
 print("Selecting parent joint")
