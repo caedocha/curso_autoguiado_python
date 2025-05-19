@@ -6,14 +6,21 @@
 Solución de Zero-Out Simplificado
 Este script hace un "zero out" usando funciones para ordenar el sript y hacerlo reutilizable.
 """
+
 import maya.cmds as cmds
 
 def create_empty_group(grp_name):
+    """
+    Creates the controller's empty group.
+    """
     is_group_empty = True
     cmds.group(em=is_group_empty, name=grp_name)
     print("Group " + grp_name + " created")
 
 def transfer_attributes(ctrl_name, grp_name):
+    """
+    Transfer the attributes' values from the controller to the group.
+    """
     tx_attribute = ".translateX"
     ty_attribute = ".translateY"
     tz_attribute = ".translateZ"
@@ -39,6 +46,16 @@ def transfer_attributes(ctrl_name, grp_name):
     print("Transferred controller's values to group")
 
 def zero_out_controller(ctrl_name):
+    """
+    Sets to zero the attributes of the controller.
+    """
+    tx_attribute = ".translateX"
+    ty_attribute = ".translateY"
+    tz_attribute = ".translateZ"
+    rx_attribute = ".rotateX"
+    ry_attribute = ".rotateY"
+    rz_attribute = ".rotateZ"
+
     cmds.setAttr(ctrl_name + tx_attribute, 0)
     cmds.setAttr(ctrl_name + ty_attribute, 0)
     cmds.setAttr(ctrl_name + tz_attribute, 0)
@@ -50,6 +67,9 @@ def zero_out_controller(ctrl_name):
     print("Zeroed-out controller's values")
 
 def main(ctrl_name):
+    """
+    Main function where all the zeroing-out logic is grouped.
+    """
     grp_name = ctrl_name + "_grp"
     create_empty_group(grp_name)
     transfer_attributes(ctrl_name, grp_name)
@@ -57,6 +77,8 @@ def main(ctrl_name):
     print("Parented controller under group")
     zero_out_controller(ctrl_name)
 
+# ************************** EL SCRIPT COMIENZA AQUI **************************
+print("Starting zero out")
 ctrl = cmds.ls(sl=True)[0]
 print("Controller " + ctrl + " selected ")
 main(ctrl)
