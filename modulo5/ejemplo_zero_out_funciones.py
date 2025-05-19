@@ -4,7 +4,7 @@
 ****************************************************************************************************
 
 Solución de Zero-Out Simplificado
-Este script hace un "zero out" usando funciones para ordenar el sript y hacerlo reutilizable.
+Este script hace un "zero out" usando funciones para ordenar el script y hacerlo reutilizable.
 """
 
 import maya.cmds as cmds
