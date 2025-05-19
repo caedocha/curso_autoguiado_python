@@ -19,7 +19,17 @@ def say_hello(name):
 say_hello("Carlos")
 ```
 
-## Función que no recibe parámetros y devuelve valores de retorno
+## Función que devuelve valores de retorno
+
+```python
+def say_hello():
+    greeting = "Hello there! My name is Carlos"
+    return greeting
+
+prit(say_hello())
+```
+
+## Función que recibe parámetros y devuelve valores de retorno
 
 ```python
 def say_hello(name):
