@@ -10,19 +10,19 @@ import maya.cmds as cmds
 
 # Selecciona el primer elemento del valor retornado por `cmds.ls` usando índices.
 # Este script asume que solo se selecciona el joint al que se le va a crear el controlador.
-targetJoint = cmds.ls(sl=True)[0]
+target_joint = cmds.ls(sl=True)[0]
 
 # Se crean las variables de los nombres del controlador.
-newControllerName = targetJoint + "_ctrl"
+new_controller_name = target_joint + "_ctrl"
 
 # Se crea el controlador.
-print("================ Create controller for joint " + targetJoint)
-cmds.circle(c=(0,0,0), nr=(0,1,0), sw=360, r=1, d=3, ut=0, tol=0.1, s=8, ch=1, name=newControllerName)
+print("================ Create controller for joint " + target_joint)
+cmds.circle(c=(0,0,0), nr=(0,1,0), sw=360, r=1, d=3, ut=0, tol=0.1, s=8, ch=1, name=new_controller_name)
 
 print("Positioning controller")
-parentConst = cmds.parentConstraint(targetJoint, newControllerName, weight=2)[0]
+parent_const = cmds.parentConstraint(target_joint, new_controller_name, weight=1)[0]
 # Se borra el parent constraint, solo era necesario temporalmente para posicionar el controlador.
-cmds.delete(parentConst)
+cmds.delete(parent_const)
 
 print("Zeroing-out controller")
 
@@ -30,10 +30,10 @@ print("Zeroing-out controller")
 **************************************** ZERO-OUT INICIO ****************************************
 """
 
-print("Controller " + newControllerName + " selected ")
+print("Controller " + new_controller_name + " selected ")
 
 # Variable con el nombre del grupo. Se crea concatenando el nombre del controlador con el sufijo "_grp".
-grp_name = newControllerName + "_grp"
+grp_name = new_controller_name + "_grp"
 
 # Variable que indica que se cree un grupo vacío cuando se llame a la función `cmds.group`.
 is_group_empty = True
@@ -63,14 +63,14 @@ Se obtienen los valores del controlador que se transferirán al grupo usando `cm
 """
 
 # Se obtiene los valores de los atributos de traslación de los ejes X, Y y Z del controlador
-cube_tx = cmds.getAttr(newControllerName + tx_attribute)
-cube_ty = cmds.getAttr(newControllerName + ty_attribute)
-cube_tz = cmds.getAttr(newControllerName + tz_attribute)
+cube_tx = cmds.getAttr(new_controller_name + tx_attribute)
+cube_ty = cmds.getAttr(new_controller_name + ty_attribute)
+cube_tz = cmds.getAttr(new_controller_name + tz_attribute)
 
 # Se obtiene los valores de los atributos de rotación de los ejes X, Y y Z del controlador
-cube_rx = cmds.getAttr(newControllerName + rx_attribute)
-cube_ry = cmds.getAttr(newControllerName + ry_attribute)
-cube_rz = cmds.getAttr(newControllerName + rz_attribute)
+cube_rx = cmds.getAttr(new_controller_name + rx_attribute)
+cube_ry = cmds.getAttr(new_controller_name + ry_attribute)
+cube_rz = cmds.getAttr(new_controller_name + rz_attribute)
 
 print("Obtained controller's attributes for zeroing out.")
 
@@ -92,7 +92,7 @@ print("Transferred controller's values to group")
 """
 Parent controlador bajo grupo
 """
-cmds.parent(newControllerName, grp_name)
+cmds.parent(new_controller_name, grp_name)
 
 print("Parented controller under group")
 
@@ -100,14 +100,14 @@ print("Parented controller under group")
 "Zero-out" de valores de controlador usando `cmds.setAttr`
 """
 # Atributos de traslación
-cmds.setAttr(newControllerName + tx_attribute, 0)
-cmds.setAttr(newControllerName + ty_attribute, 0)
-cmds.setAttr(newControllerName + tz_attribute, 0)
+cmds.setAttr(new_controller_name + tx_attribute, 0)
+cmds.setAttr(new_controller_name + ty_attribute, 0)
+cmds.setAttr(new_controller_name + tz_attribute, 0)
 
 # Atributos de rotación
-cmds.setAttr(newControllerName + rx_attribute, 0)
-cmds.setAttr(newControllerName + ry_attribute, 0)
-cmds.setAttr(newControllerName + rz_attribute, 0)
+cmds.setAttr(new_controller_name + rx_attribute, 0)
+cmds.setAttr(new_controller_name + ry_attribute, 0)
+cmds.setAttr(new_controller_name + rz_attribute, 0)
 
 print("Zeroed-out controller's values")
 
@@ -117,4 +117,4 @@ print("Zeroed-out controller's values")
 
 print("Parenting joint to controller")
 # Se crea el orient constraint que hará que el controlador pueda controlador al joint.
-cmds.orientConstraint(newControllerName, targetJoint)
+cmds.orientConstraint(new_controller_name, target_joint)
