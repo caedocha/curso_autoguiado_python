@@ -106,11 +106,34 @@ def constraint_joint_to_controller(ctrl, target_joint):
     print("Constraining joint to controller")
     cmds.orientConstraint(ctrl, target_joint)
 
+def block_and_hide_attributes(controller_name):
+    """
+    Blocks and hides the scale and traslation attributes of the controller.
+    """
+    print("Blocking and hiding controller's scale and translation attributes")
+    # Atributos de traslación
+    tx_attribute = ".translateX"
+    ty_attribute = ".translateY"
+    tz_attribute = ".translateZ"
+
+    # Atributos de escala
+    sx_attribute = ".scaleX"
+    sy_attribute = ".scaleY"
+    sz_attribute = ".scaleZ"
+
+    cmds.setAttr(controller_name + tx_attribute, lock=True, keyable=False, channelBox=False)
+    cmds.setAttr(controller_name + ty_attribute, lock=True, keyable=False, channelBox=False)
+    cmds.setAttr(controller_name + tz_attribute, lock=True, keyable=False, channelBox=False)
+    cmds.setAttr(controller_name + sx_attribute, lock=True, keyable=False, channelBox=False)
+    cmds.setAttr(controller_name + sy_attribute, lock=True, keyable=False, channelBox=False)
+    cmds.setAttr(controller_name + sz_attribute, lock=True, keyable=False, channelBox=False)
+
 def main(taget_joint):
     controller_name = create_controller(target_joint)
     move_controller_to_target(controller_name, target_joint)
     zero_out(controller_name)
     constraint_joint_to_controller(controller_name, target_joint)
+    block_and_hide_attributes(controller_name)
     print("Done")
 
 selected_joints = cmds.ls(sl=True)
