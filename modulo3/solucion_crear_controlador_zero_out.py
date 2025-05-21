@@ -58,6 +58,10 @@ rx_attribute = ".rotateX"
 ry_attribute = ".rotateY"
 rz_attribute = ".rotateZ"
 
+# Atributos de escala
+sx_attribute = ".scaleX"
+sy_attribute = ".scaleY"
+sz_attribute = ".scaleZ"
 """
 Se obtienen los valores del controlador que se transferirán al grupo usando `cmds.getAttr`.
 """
@@ -118,3 +122,13 @@ print("Zeroed-out controller's values")
 print("Parenting joint to controller")
 # Se crea el orient constraint que hará que el controlador pueda controlador al joint.
 cmds.orientConstraint(new_controller_name, target_joint)
+
+print("Blocking and hiding controller's translation and scale attributes")
+# Para bloquear y ocultar atributos, se usa `cmds.setAttr` con los parámetros lock, keyable y channelBox.
+cmds.setAttr(new_controller_name + tx_attribute, lock=True, keyable=False, channelBox=False)
+cmds.setAttr(new_controller_name + ty_attribute, lock=True, keyable=False, channelBox=False)
+cmds.setAttr(new_controller_name + tz_attribute, lock=True, keyable=False, channelBox=False)
+cmds.setAttr(new_controller_name + sx_attribute, lock=True, keyable=False, channelBox=False)
+cmds.setAttr(new_controller_name + sy_attribute, lock=True, keyable=False, channelBox=False)
+cmds.setAttr(new_controller_name + sz_attribute, lock=True, keyable=False, channelBox=False)
+

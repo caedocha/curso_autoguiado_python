@@ -18,6 +18,11 @@ pole_vector_controller_group = pole_vector_controller + "_grp"
 ik_controller = "ik_r_ctrl"
 ik_controller_group = ik_controller + "_grp"
 
+# Atributos de escala para bloquear y ocultarlos
+sx_attribute = ".scaleX"
+sy_attribute = ".scaleY"
+sz_attribute = ".scaleZ"
+
 print("Creating IK handle")
 # Se crea el IK handle usando el joint del hombro y la muñeca.
 # Luego se guarda el nombre del IK handle en la variable `ik_handle`.
@@ -62,5 +67,17 @@ cmds.delete(pointConst)
 print("Parenting IK handle to IK controller")
 # "Parentea" el IK handle con el controlador IK.
 cmds.parent(ik_handle, ik_controller)
+
+print("Blocking and hiding controller's scale attributes")
+# Para bloquear y ocultar atributos, se usa `cmds.setAttr` con los parámetros lock, keyable y channelBox.
+# Bloquea los atributos de escala del controlador de IK.
+cmds.setAttr(ik_controller + sx_attribute, lock=True, keyable=False, channelBox=False)
+cmds.setAttr(ik_controller + sy_attribute, lock=True, keyable=False, channelBox=False)
+cmds.setAttr(ik_controller + sz_attribute, lock=True, keyable=False, channelBox=False)
+
+# Bloquea los atributos de escala del controlador del pole vector.
+cmds.setAttr(pole_vector_controller + sx_attribute, lock=True, keyable=False, channelBox=False)
+cmds.setAttr(pole_vector_controller + sy_attribute, lock=True, keyable=False, channelBox=False)
+cmds.setAttr(pole_vector_controller + sz_attribute, lock=True, keyable=False, channelBox=False)
 
 print("Done")
