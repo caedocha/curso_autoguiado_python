@@ -12,9 +12,9 @@ def main():
     print("Creating simple UI")
 
     # Las variables de los nombres de los controles para poder identificarlos.
-    sliderName = "slider"
-    textboxName = "textbox"
-    checkboxName = "checkbox"
+    slider_name = "slider"
+    textbox_name = "textbox"
+    checkbox_name = "checkbox"
 
     #
     # VENTANA
@@ -35,9 +35,9 @@ def main():
     #
     # Se crean controladores de varios tipos. Noten que a los controles se les indica
     # a quién pertenecen con el parámetro parent(p) pero en este caso el "papá" es el layout.
-    cmds.floatSliderGrp(sliderName, p=layout,label="Slider",w=280,min=0,max=100,value=50,step=1,field=True,cal=[1,"left"])
-    cmds.textFieldGrp(textboxName, p=layout,h=50,label="Textbox",w=280,cal=[1,"left"])
-    cmds.checkBox(checkboxName,p=layout,l="Checkbox",w=280,enable=True)
+    cmds.floatSliderGrp(slider_name, p=layout,label="Slider",w=280,min=0,max=100,value=50,step=1,field=True,cal=[1,"left"])
+    cmds.textFieldGrp(textbox_name, p=layout,h=50,label="Textbox",w=280,cal=[1,"left"])
+    cmds.checkBox(checkbox_name,p=layout,l="Checkbox",w=280,enable=True)
     cmds.button(p=layout,h=50,w=280,l="Button")
 
     #
@@ -47,4 +47,5 @@ def main():
     cmds.showWindow(win)
     print("Done")
 
+# ************************** EL SCRIPT COMIENZA AQUI **************************
 main()
