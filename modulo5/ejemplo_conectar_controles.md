@@ -8,7 +8,7 @@ A este parámetro se le puede pasar la función para hacer _zero-out_, para crea
 
 Aquí se presenta una _script_ que imprime en el _output_ del _script editor_ un mensaje.
 
-*Nota:* Noten que la función que se conecta con el botón debe recibir un parámetro especial llamada `*args`.
+**Nota:** Noten que la función que se conecta con el botón debe recibir un parámetro especial llamada `*args`.
 Por ahora, no hace falta entender para qué sirve, solo agregénlo a todas las funciones que conecten con los botones.
 
 ```python
