@@ -106,7 +106,7 @@ def main():
 main()
 ```
 
-## _tab Layout_
+## _Tab Layout_
 
 ```python
 """
@@ -123,13 +123,13 @@ def delete_window_if_exists(window_name):
 
 def main():
     # Variables de la ventana
-    window_name = "tab_window"
+    window_name = "grid_window"
     window_width = 200
     window_height = 200
-    window_title = "tab Layout"
+    window_title = "Grid Layout"
 
     # Variables del layout
-    layout_name = "tab_layout"
+    layout_name = "grid_layout"
 
     # Variables del layout
     button_label = "Test"
@@ -144,7 +144,7 @@ def main():
     cmds.window(window_name, widthHeight=(window_width, window_height), title=window_title, sizeable=can_window_resize)
 
     # Layout
-    cmds.tabLayout(layout_name, parent=window_name, numberOfColumns=2, cellWidthHeight=(button_width, button_height))
+    cmds.gridLayout(layout_name, parent=window_name, numberOfColumns=2, cellWidthHeight=(button_width, button_height))
 
     # Controles
     cmds.button(label=button_label, parent=layout_name, width=button_width, height=button_height)
