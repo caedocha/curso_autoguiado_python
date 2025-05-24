@@ -11,7 +11,7 @@ import maya.cmds as cmds
 # Las variables que se van a usar para crear y orientar las 3 cadenas de joints.
 side = "r"
 orientation = "xyz"
-secondaryAxisOrient = "zdown"
+secondaryAxisOrient = "yup"
 chain_types = ["ik", "fk", "bind"]
 
 # Se listan los locators seleccionados.

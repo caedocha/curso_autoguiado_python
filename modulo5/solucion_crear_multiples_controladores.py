@@ -88,7 +88,7 @@ def create_controller(target_joint):
     """
     new_controller_name = target_joint + "_ctrl"
     print("================ Create controller for joint " + target_joint)
-    cmds.circle(c=(0,0,0), nr=(0,1,0), sw=360, r=1, d=3, ut=0, tol=0.1, s=8, ch=1, name=new_controller_name)
+    cmds.circle(c=(0,0,0), nr=(1,0,0), sw=360, r=1, d=3, ut=0, tol=0.1, s=8, ch=1, name=new_controller_name)
     return new_controller_name
 
 def move_controller_to_target(ctrl, target_joint):

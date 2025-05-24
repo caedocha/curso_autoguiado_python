@@ -43,7 +43,7 @@ el output del script editor.
 joints = []
 # Las variables para orientar los joints.
 orientation = "yxz"
-secondaryAxisOrient = "xup"
+secondaryAxisOrient = "yup"
 
 # Se crea la cadena de joints y se guardan los nombres de los joints.
 for i in range(3):
