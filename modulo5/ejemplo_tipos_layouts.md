@@ -106,7 +106,7 @@ def main():
 main()
 ```
 
-## _Tab Layout_
+## _Grid Layout_
 
 ```python
 """
