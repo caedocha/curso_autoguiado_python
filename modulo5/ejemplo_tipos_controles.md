@@ -41,7 +41,7 @@ def main():
 main()
 ```
 
-## _Text_
+## Mensaje de Texto
 
 ```python
 """
