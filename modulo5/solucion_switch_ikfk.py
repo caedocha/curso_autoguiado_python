@@ -202,11 +202,13 @@ def main():
     # Variables con la configuracion de la ventana
     window_title = "IK/FK Switch"
     window_width = 370
-    window_height = 130
+    window_height = 210
 
-    # Variables con la configuracion de los botones
+    # Variables con la configuracion de los controles
     button_width = 350
     button_height = 50
+    text_width = 350
+    text_height = 20
 
     # VENTANA
     win = cmds.window(title=window_title,rtf=True, sizeable=False, widthHeight=(window_width,window_height))
@@ -215,7 +217,9 @@ def main():
     layout = cmds.columnLayout(p=win, cat=("left",10),rs=10)
 
     # CONTROLES
+    cmds.text(p=layout, w=text_width, h=text_height, align="center", l="1. Select the wrist joint to create switch controller", ww=True)
     cmds.button(p=layout,h=button_height,w=button_width,l="Create switch controller", command=create_switch_controller)
+    cmds.text(p=layout, w=text_width, h=text_height, align="center", l="2. Select the joint's contrainsts and then the switch to connect them", ww=True)
     cmds.button(p=layout,h=button_height,w=button_width,l="Connect constraints to switch", command=connect_constraints_to_switch)
 
     # MOSTRAR VENTANA
