@@ -3,7 +3,7 @@
      TODOS LOS EJEMPLOS Y SOLUCIONES ESTÁN LISTOS PARA COPIAR Y PEGARSE EN EL SCRIPT EDITOR
 ****************************************************************************************************
 
-Solución para crear una GUI para correr script que automatizan algunas partes del rig de un brazo.
+Solución para crear la GUI del proyecto final.
 """
 
 import maya.cmds as cmds
@@ -180,8 +180,71 @@ def create_fk_controllers_main(*args):
 #
 # ********************************* FUNCIONES CREAR CONTROLADORES FK COMIENZAN AQUI *********************************
 #
+
+def block_and_hide_ik_controllers(ik_controller, pole_vector_controller):
+    sx_attribute = ".scaleX"
+    sy_attribute = ".scaleY"
+    sz_attribute = ".scaleZ"
+    cmds.setAttr(ik_controller + sx_attribute, lock=True, keyable=False, channelBox=False)
+    cmds.setAttr(ik_controller + sy_attribute, lock=True, keyable=False, channelBox=False)
+    cmds.setAttr(ik_controller + sz_attribute, lock=True, keyable=False, channelBox=False)
+    cmds.setAttr(pole_vector_controller + sx_attribute, lock=True, keyable=False, channelBox=False)
+    cmds.setAttr(pole_vector_controller + sy_attribute, lock=True, keyable=False, channelBox=False)
+    cmds.setAttr(pole_vector_controller + sz_attribute, lock=True, keyable=False, channelBox=False)
+
+def position_pole_vector_controller(elbow_joint, pole_vector_controller_group):
+    pointConst = cmds.pointConstraint(elbow_joint, pole_vector_controller_group, weight=1)[0]
+    cmds.delete(pointConst)
+    cmds.move(0,0,-2, pole_vector_controller_group, relative=True)
+
 def create_ik_rig(*args):
     print("Creating IK rig")
+
+    joints = cmds.ls(sl=True)
+    shoulder_joint = joints[0]
+    elbow_joint = joints[1]
+    wrist_joint = joints[2]
+
+    pole_vector_controller = "poleVector_r_ctrl"
+    pole_vector_controller_group = pole_vector_controller + "_grp"
+    ik_controller = "ik_r_ctrl"
+    ik_controller_group = ik_controller + "_grp"
+
+    print("Creating IK handle")
+    ik_handle = cmds.ikHandle(sj=shoulder_joint, ee=wrist_joint)[0]
+    print(ik_handle)
+
+    print("Creating pole vector controller")
+    cmds.spaceLocator(n=pole_vector_controller)
+
+    print("Grouping pole vector controller")
+    cmds.group(em=True, n=pole_vector_controller_group)
+    cmds.parent(pole_vector_controller, pole_vector_controller_group)
+
+    print("Positioning pole vector controller")
+    position_pole_vector_controller(elbow_joint, pole_vector_controller_group)
+
+    print("Creating pole vector constraint")
+    cmds.poleVectorConstraint(pole_vector_controller, ik_handle)
+
+    print("Creating IK controller")
+    cmds.circle(c=(0,0,0), nr=(1,0,0), r=1, d=3, ut=0, tol=0.1, s=8, ch=1, name=ik_controller)
+
+    print("Grouping up IK controller")
+    cmds.group(em=True, n=ik_controller_group)
+    cmds.parent(ik_controller, ik_controller_group)
+
+    print("Positioning IK controller")
+    pointConst = cmds.parentConstraint(wrist_joint, ik_controller_group, weight=1)[0]
+    cmds.delete(pointConst)
+
+    print("Parenting IK handle to IK controller")
+    cmds.parent(ik_handle, ik_controller)
+
+    print("Blocking and hiding controller's scale attributes")
+    block_and_hide_ik_controllers(ik_controller, pole_vector_controller)
+
+    print("Done")
 
 #
 # ********************************* FUNCIONES CREAR CONTROLADORES FK TERMINAN AQUI *********************************
@@ -190,12 +253,131 @@ def create_ik_rig(*args):
 #
 # ********************************* FUNCIONES CREAR SWITCH IK/FK COMIENZAN AQUI *********************************
 #
+
+def block_and_hide_attrs(switch_name):
+    # Atributos de traslación
+    tx_attribute = ".translateX"
+    ty_attribute = ".translateY"
+    tz_attribute = ".translateZ"
+
+    # Atributos de rotación
+    rx_attribute = ".rotateX"
+    ry_attribute = ".rotateY"
+    rz_attribute = ".rotateZ"
+
+    # Atributos de escala
+    sx_attribute = ".scaleX"
+    sy_attribute = ".scaleY"
+    sz_attribute = ".scaleZ"
+
+    cmds.setAttr(switch_name + tx_attribute, lock=True, keyable=False, channelBox=False)
+    cmds.setAttr(switch_name + ty_attribute, lock=True, keyable=False, channelBox=False)
+    cmds.setAttr(switch_name + tz_attribute, lock=True, keyable=False, channelBox=False)
+    cmds.setAttr(switch_name + rx_attribute, lock=True, keyable=False, channelBox=False)
+    cmds.setAttr(switch_name + ry_attribute, lock=True, keyable=False, channelBox=False)
+    cmds.setAttr(switch_name + rz_attribute, lock=True, keyable=False, channelBox=False)
+    cmds.setAttr(switch_name + sx_attribute, lock=True, keyable=False, channelBox=False)
+    cmds.setAttr(switch_name + sy_attribute, lock=True, keyable=False, channelBox=False)
+    cmds.setAttr(switch_name + sz_attribute, lock=True, keyable=False, channelBox=False)
+
+def position_switch(switch_name):
+    switch_ty = 2
+    point_const = cmds.pointConstraint(wrist_joint, switch_name, weight=1)[0]
+    cmds.delete(point_const)
+    cmds.select(switch_name)
+
+    # Se mueve el switch en el eje Y para separarlo un poco del joint de la muñeca.
+    cmds.setAttr(switch_name + ".ty", switch_ty)
+
+def create_switch_attributes(switch_name):
+    cmds.select(switch_name)
+    cmds.addAttr(ln="description", at="enum", en="1=IK,0=FK:")
+    cmds.setAttr(switch_name + ".description", edit=True, channelBox=True)
+    cmds.addAttr(ln="switch", at="long", min=0, max=1, dv=1)
+    cmds.setAttr(switch_name + ".switch", edit=True, keyable=True)
+    cmds.select(d=True)
+
+def create_switch_controller(*args):
+    print("Creating IK/FK switch.")
+
+    wrist_joint = cmds.ls(sl=True)[0]
+    switch_name = "ikfk_switch"
+    loc = cmds.spaceLocator(name=switch_name)
+
+    print("Positioning IK/FK switch")
+    position_switch(switch_name)
+
+    print("Zeroing-out IK/FK switch")
+    zero_out(switch_name)
+
+    print("Parenting IK/FK switch to wrist joint")
+    cmds.pointConstraint(wrist_joint, switch_name, weight=1, maintainOffset=True)
+
+    print("Block and hide attributes of IK/FK switch")
+    block_and_hide_attrs(switch_name)
+
+    print("Creating switch attributes")
+    create_switch_attributes(switch_name)
+
+def connect_fk_weights_to_switch(switch_name, obj, attr):
+    print("Connecting FK weight to switch")
+    plusMinusNode = cmds.shadingNode("plusMinusAverage", asUtility=True)
+    cmds.setAttr(plusMinusNode + ".operation", 2)
+    cmds.setAttr(plusMinusNode + ".input1D[0]", 1)
+    cmds.connectAttr(switch_name + ".switch", plusMinusNode + ".input1D[1]")
+    cmds.connectAttr(plusMinusNode + ".output1D", obj + "." + attr)
+
+def connect_ik_weights_to_switch(switch_name, obj, attr):
+    print("Connecting IK weight to switch")
+    cmds.connectAttr(switch_name + ".switch", obj + "." + attr)
+
+def connect_constraints_to_switch(*args):
+    print("Connecting positive side of the switch to constraints")
+    objs = cmds.ls(sl=True)
+    switch_name = objs[len(objs) - 1]
+    for obj in objs:
+        if(cmds.nodeType(obj) == "parentConstraint"):
+            attrs = cmds.listAttr(obj)
+            for attr in attrs:
+                attr_parts = attr.split("_")
+                if(attr_parts[len(attr_parts) - 1] == "ikW0"):
+                    connect_ik_weights_to_switch(switch_name, obj, attr)
+                if(attr_parts[len(attr_parts) - 1] == "fkW1"):
+                    connect_fk_weights_to_switch(switch_name, obj, attr)
+
 def create_ik_fk_switch_gui(*args):
     print("Display IK/FK switch GUI")
+    # Variables con la configuracion de la ventana
+    window_title = "IK/FK Switch"
+    window_width = 370
+    window_height = 210
+
+    # Variables con la configuracion de los controles
+    button_width = 350
+    button_height = 50
+    text_width = 350
+    text_height = 20
+
+    # VENTANA
+    win = cmds.window(title=window_title,rtf=True, sizeable=False, widthHeight=(window_width,window_height))
+
+    # LAYOUT
+    layout = cmds.columnLayout(p=win, cat=("left",10),rs=10)
+
+    # CONTROLES
+    cmds.text(p=layout, w=text_width, h=text_height, align="center", l="1. Select the wrist joint to create switch controller", ww=True)
+    cmds.button(p=layout,h=button_height,w=button_width,l="Create switch controller", command=create_switch_controller)
+    cmds.text(p=layout, w=text_width, h=text_height, align="center", l="2. Select the joint's constraints and then the switch to connect them", ww=True)
+    cmds.button(p=layout,h=button_height,w=button_width,l="Connect constraints to switch", command=connect_constraints_to_switch)
+
+    # MOSTRAR VENTANA
+    cmds.showWindow(win)
+    print("Done")
 
 #
 # ********************************* FUNCIONES CREAR SWITCH IK/FK TERMINAN AQUI *********************************
 #
+
 def delete_window_if_exists(window_name):
     if(cmds.window(window_name, q=True, exists=True)):
         print("Found old window from previous runs. Deleting it.")
@@ -207,7 +389,7 @@ def create_gui(window_name):
     # Variables con la configuración de la ventana
     window_title = "Arm Auto-rig"
     window_width = 370
-    window_height = 300
+    window_height = 320
 
     # Variables con la configuración de los botones
     button_width = 350
