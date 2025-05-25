@@ -431,11 +431,13 @@ def create_gui(window_name):
     # Variables con la configuración de la ventana
     window_title = "Arm Auto-rig"
     window_width = 370
-    window_height = 320
+    window_height = 480
 
-    # Variables con la configuración de los botones
+    # Variables con la configuración de los controles
     button_width = 350
     button_height = 50
+    text_width = 350
+    text_height = 20
 
     # VENTANA
     win = cmds.window(title=window_title,rtf=True, sizeable=False, widthHeight=(window_width,window_height))
@@ -444,11 +446,16 @@ def create_gui(window_name):
     layout = cmds.columnLayout(p=win, cat=("left",10),rs=10)
 
     # CONTROLES
+    cmds.text(p=layout, w=text_width, h=text_height, align="center", l="1. Select the locators to create the joint chains", ww=True)
     cmds.button(p=layout,h=button_height,w=button_width,l="Create IK/FK/Bind joint chains", command=create_joint_chains_main)
+    cmds.text(p=layout, w=text_width, h=text_height, align="center", l="2. Select the FK joint(s) to create the FK controllers", ww=True)
     cmds.button(p=layout,h=button_height,w=button_width,l="Create FK controller(s)", command=create_fk_controllers_main)
-    cmds.button(p=layout,h=button_height,w=button_width,l="Zero-out", command=zero_out_main)
+    cmds.text(p=layout, w=text_width, h=text_height, align="center", l="3. Select the IK joints in order to create the IK rig", ww=True)
     cmds.button(p=layout,h=button_height,w=button_width,l="Create IK Rig", command=create_ik_rig)
+    cmds.text(p=layout, w=text_width, h=text_height, align="center", l="4. Open the IK/FK switch menu", ww=True)
     cmds.button(p=layout,h=button_height,w=button_width,l="Create IK/FK Switch", command=create_ik_fk_switch_gui)
+    cmds.text(p=layout, w=text_width, h=text_height, align="center", l="Select the object(s) to zero-out", ww=True)
+    cmds.button(p=layout,h=button_height,w=button_width,l="Zero-out", command=zero_out_main)
 
     # MOSTRAR VENTANA
     cmds.showWindow(win)
