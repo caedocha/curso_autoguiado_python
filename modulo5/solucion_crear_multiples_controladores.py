@@ -128,7 +128,7 @@ def block_and_hide_attributes(controller_name):
     cmds.setAttr(controller_name + sy_attribute, lock=True, keyable=False, channelBox=False)
     cmds.setAttr(controller_name + sz_attribute, lock=True, keyable=False, channelBox=False)
 
-def main(taget_joint):
+def setup_fk_controller(target_joint):
     controller_name = create_controller(target_joint)
     move_controller_to_target(controller_name, target_joint)
     zero_out(controller_name)
@@ -136,9 +136,12 @@ def main(taget_joint):
     block_and_hide_attributes(controller_name)
     print("Done")
 
-selected_joints = cmds.ls(sl=True)
+def main(selected_joints):
+    print("Selected joints are: " + str(selected_joints))
+    for target_joint in selected_joints:
+        print("Creating controlledor for joint " + target_joint)
+        setup_fk_controller(target_joint)
 
+selected_joints = cmds.ls(sl=True)
 print("Selected joints are: " + str(selected_joints))
-for target_joint in selected_joints:
-    print("Creating controlledor for joint " + target_joint)
-    main(target_joint)
+main(selected_joints)
