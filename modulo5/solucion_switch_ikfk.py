@@ -90,6 +90,9 @@ def zero_out_main(*args):
 # ********************************* FUNCIONES ZERO-OUT TERMINAN AQUI *********************************
 #
 
+#
+# ********************************* FUNCIONES CREAR SWITCH COMIENZAN AQUI *********************************
+#
 def block_and_hide_attrs(switch_name):
     # Atributos de traslación
     tx_attribute = ".translateX"
@@ -133,9 +136,10 @@ def create_switch_attributes(switch_name):
     cmds.setAttr(switch_name + ".switch", edit=True, keyable=True)
     cmds.select(d=True)
 
-def main(wrist_joint):
+def create_switch_controller(*args):
     print("Creating IK/FK switch.")
 
+    wrist_joint = cmds.ls(sl=True)[0]
     switch_name = "ikfk_switch"
     loc = cmds.spaceLocator(name=switch_name)
 
@@ -154,5 +158,69 @@ def main(wrist_joint):
     print("Creating switch attributes")
     create_switch_attributes(switch_name)
 
-wrist_joint = cmds.ls(sl=True)[0]
-main(wrist_joint)
+#
+# ********************************* FUNCIONES CREAR SWITCH TERMINAN AQUI *********************************
+#
+
+#
+# ********************************* FUNCIONES PARA CONECTAR CONSTRAINTS AL SWITCH TERMINAN AQUI *********************************
+#
+
+def connect_fk_weights_to_switch(switch_name, obj, attr):
+    print("Connecting FK weight to switch")
+    plusMinusNode = cmds.shadingNode("plusMinusAverage", asUtility=True)
+    cmds.setAttr(plusMinusNode + ".operation", 2)
+    cmds.setAttr(plusMinusNode + ".input1D[0]", 1)
+    cmds.connectAttr(switch_name + ".switch", plusMinusNode + ".input1D[1]")
+    cmds.connectAttr(plusMinusNode + ".output1D", obj + "." + attr)
+
+def connect_ik_weights_to_switch(switch_name, obj, attr):
+    print("Connecting IK weight to switch")
+    cmds.connectAttr(switch_name + ".switch", obj + "." + attr)
+
+def connect_constraints_to_switch(*args):
+    print("Connecting positive side of the switch to constraints")
+    objs = cmds.ls(sl=True)
+    switch_name = objs[len(objs) - 1]
+    for obj in objs:
+        if(cmds.nodeType(obj) == "parentConstraint"):
+            attrs = cmds.listAttr(obj)
+            for attr in attrs:
+                attr_parts = attr.split("_")
+                if(attr_parts[len(attr_parts) - 1] == "ikW0"):
+                    connect_ik_weights_to_switch(switch_name, obj, attr)
+                if(attr_parts[len(attr_parts) - 1] == "fkW1"):
+                    connect_fk_weights_to_switch(switch_name, obj, attr)
+
+#
+# ********************************* FUNCIONES PARA CONECTAR CONSTRAINTS AL SWITCH TERMINAN AQUI *********************************
+#
+
+def main():
+    print("Creating IK/FK Switch GUI")
+
+    # Variables con la configuracion de la ventana
+    window_title = "IK/FK Switch"
+    window_width = 370
+    window_height = 130
+
+    # Variables con la configuracion de los botones
+    button_width = 350
+    button_height = 50
+
+    # VENTANA
+    win = cmds.window(title=window_title,rtf=True, sizeable=False, widthHeight=(window_width,window_height))
+
+    # LAYOUT
+    layout = cmds.columnLayout(p=win, cat=("left",10),rs=10)
+
+    # CONTROLES
+    cmds.button(p=layout,h=button_height,w=button_width,l="Create switch controller", command=create_switch_controller)
+    cmds.button(p=layout,h=button_height,w=button_width,l="Connect constraints to switch", command=connect_constraints_to_switch)
+
+    # MOSTRAR VENTANA
+    cmds.showWindow(win)
+    print("Done")
+
+# ************************** EL SCRIPT COMIENZA AQUI **************************
+main()
