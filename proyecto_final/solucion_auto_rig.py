@@ -93,12 +93,34 @@ def zero_out_main(*args):
 #
 # ********************************* FUNCIONES CREAR CADENAS DE JOINTS COMIENZAN AQUI *********************************
 #
+def create_joint_constraints(locators, side):
+    print("Creating parent constraints")
+    for loc in locators:
+        jnt = "jnt_" + side + "_" + loc
+        print("Creating constraints for " + loc)
+        ik_jnt = jnt + "_ik"
+        fk_jnt = jnt + "_fk"
+        bind_jnt = jnt + "_bind"
+        cmds.parentConstraint(ik_jnt, bind_jnt)
+        cmds.parentConstraint(fk_jnt, bind_jnt)
+
+def orient_wrist_joint(wrist_jnt):
+    print("Orienting wrist joint")
+    cmds.select(wrist_jnt)
+    cmds.joint(edit=True, oj="none", ch=True, zso=True)
+    cmds.select(cl=True)
+
+def orient_nonwrist_joints(non_wrist_joints):
+    print("Orienting non-wrist joints")
+    orientation = "xyz"
+    secondaryAxisOrient = "yup"
+    cmds.select(non_wrist_joints) 
+    cmds.joint(edit=True, oj=orientation, secondaryAxisOrient=secondaryAxisOrient, ch=True, zso=True)
+    cmds.select(cl=True)
 
 def create_joint_chains_main(*args):
     print("Creating joint chains")
     side = "r"
-    orientation = "xyz"
-    secondaryAxisOrient = "yup"
     chain_types = ["ik", "fk", "bind"]
 
     locators = cmds.ls(sl=True)
@@ -118,12 +140,10 @@ def create_joint_chains_main(*args):
                 non_wrist_joints.append(jnt_name)
             else:
                 wrist_jnt = jnt_name
-        cmds.select(non_wrist_joints) 
-        cmds.joint(edit=True, oj=orientation, secondaryAxisOrient=secondaryAxisOrient, ch=True, zso=True)
-        cmds.select(cl=True)
-        cmds.select(wrist_jnt)
-        cmds.joint(edit=True, oj="none", ch=True, zso=True)
-        cmds.select(cl=True)
+        orient_nonwrist_joints(non_wrist_joints)
+        orient_wrist_joint(wrist_jnt)
+    create_joint_constraints(locators, side)
+
 #
 # ********************************* FUNCIONES CREAR CADENAS DE JOINTS TERMINAN AQUI *********************************
 #
