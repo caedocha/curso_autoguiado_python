@@ -219,7 +219,7 @@ def main():
     # CONTROLES
     cmds.text(p=layout, w=text_width, h=text_height, align="center", l="1. Select the wrist joint to create switch controller", ww=True)
     cmds.button(p=layout,h=button_height,w=button_width,l="Create switch controller", command=create_switch_controller)
-    cmds.text(p=layout, w=text_width, h=text_height, align="center", l="2. Select the joint's contrainsts and then the switch to connect them", ww=True)
+    cmds.text(p=layout, w=text_width, h=text_height, align="center", l="2. Select the joint's constraints and then the switch to connect them", ww=True)
     cmds.button(p=layout,h=button_height,w=button_width,l="Connect constraints to switch", command=connect_constraints_to_switch)
 
     # MOSTRAR VENTANA
