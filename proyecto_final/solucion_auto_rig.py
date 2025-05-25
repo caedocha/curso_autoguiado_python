@@ -339,20 +339,20 @@ def create_switch_controller(*args):
     print("Creating switch attributes")
     create_switch_attributes(switch_name)
 
-def connect_fk_weights_to_switch(switch_name, obj, attr):
-    print("Connecting FK weight to switch")
+def connect_fk_to_switch(switch_name, obj, attr):
+    print("Connecting FK to switch")
     plusMinusNode = cmds.shadingNode("plusMinusAverage", asUtility=True)
     cmds.setAttr(plusMinusNode + ".operation", 2)
     cmds.setAttr(plusMinusNode + ".input1D[0]", 1)
     cmds.connectAttr(switch_name + ".switch", plusMinusNode + ".input1D[1]")
     cmds.connectAttr(plusMinusNode + ".output1D", obj + "." + attr)
 
-def connect_ik_weights_to_switch(switch_name, obj, attr):
-    print("Connecting IK weight to switch")
+def connect_ik_to_switch(switch_name, obj, attr):
+    print("Connecting IK to switch")
     cmds.connectAttr(switch_name + ".switch", obj + "." + attr)
 
 def connect_constraints_to_switch(*args):
-    print("Connecting positive side of the switch to constraints")
+    print("Connecting constraints to constraints")
     objs = cmds.ls(sl=True)
     switch_name = objs[len(objs) - 1]
     for obj in objs:
@@ -361,16 +361,34 @@ def connect_constraints_to_switch(*args):
             for attr in attrs:
                 attr_parts = attr.split("_")
                 if(attr_parts[len(attr_parts) - 1] == "ikW0"):
-                    connect_ik_weights_to_switch(switch_name, obj, attr)
+                    connect_ik_to_switch(switch_name, obj, attr)
                 if(attr_parts[len(attr_parts) - 1] == "fkW1"):
-                    connect_fk_weights_to_switch(switch_name, obj, attr)
+                    connect_fk_to_switch(switch_name, obj, attr)
+
+def connect_ik_controllers_to_switch(*args):
+    print("Connecting IK controllers to constraints")
+    objs = cmds.ls(sl=True)
+    switch_name = objs[len(objs) - 1]
+    for obj in objs:
+        obj_parts = obj.split("_")
+        if(obj_parts[len(obj_parts) - 1] == "ctrl"):
+            connect_ik_to_switch(switch_name, obj, "visibility")
+
+def connect_fk_controllers_to_switch(*args):
+    print("Connecting FK controllers to constraints")
+    objs = cmds.ls(sl=True)
+    switch_name = objs[len(objs) - 1]
+    for obj in objs:
+        obj_parts = obj.split("_")
+        if(obj_parts[len(obj_parts) - 1] == "ctrl"):
+            connect_fk_to_switch(switch_name, obj, "visibility")
 
 def create_ik_fk_switch_gui(*args):
     print("Display IK/FK switch GUI")
     # Variables con la configuracion de la ventana
     window_title = "IK/FK Switch"
     window_width = 370
-    window_height = 210
+    window_height = 380
 
     # Variables con la configuracion de los controles
     button_width = 350
@@ -389,6 +407,10 @@ def create_ik_fk_switch_gui(*args):
     cmds.button(p=layout,h=button_height,w=button_width,l="Create switch controller", command=create_switch_controller)
     cmds.text(p=layout, w=text_width, h=text_height, align="center", l="2. Select the joint's constraints and then the switch to connect them", ww=True)
     cmds.button(p=layout,h=button_height,w=button_width,l="Connect constraints to switch", command=connect_constraints_to_switch)
+    cmds.text(p=layout, w=text_width, h=text_height, align="center", l="3. Select the IK controllers and then the switch to connect them", ww=True)
+    cmds.button(p=layout,h=button_height,w=button_width,l="Connect IK controllers to switch", command=connect_ik_controllers_to_switch)
+    cmds.text(p=layout, w=text_width, h=text_height, align="center", l="4. Select the FK controllers and then the switch to connect them", ww=True)
+    cmds.button(p=layout,h=button_height,w=button_width,l="Connect FK controllers to switch", command=connect_fk_controllers_to_switch)
 
     # MOSTRAR VENTANA
     cmds.showWindow(win)
