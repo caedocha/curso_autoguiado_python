@@ -90,9 +90,7 @@ def zero_out_main(*args):
 # ********************************* FUNCIONES ZERO-OUT TERMINAN AQUI *********************************
 #
 
-def main(wrist_joint):
-    print("Creating IK/FK switch.")
-
+def block_and_hide_attrs(switch_name):
     # Atributos de traslación
     tx_attribute = ".translateX"
     ty_attribute = ".translateY"
@@ -108,22 +106,6 @@ def main(wrist_joint):
     sy_attribute = ".scaleY"
     sz_attribute = ".scaleZ"
 
-    switch_name = "ikfk_switch"
-    loc = cmds.spaceLocator(name=switch_name)
-
-    print("Positioning IK/FK switch")
-    point_const = cmds.pointConstraint(wrist_joint, switch_name, weight=1)[0]
-    cmds.delete(point_const)
-    cmds.select(switch_name)
-    cmds.setAttr(switch_name + ".ty", 2)
-
-    print("Zeroing-out IK/FK switch")
-    zero_out(switch_name)
-
-    print("Parenting IK/FK switch to wrist joint")
-    cmds.pointConstraint(wrist_joint, switch_name, weight=1, maintainOffset=True)
-
-    print("Block and hide attributes of IK/FK switch")
     cmds.setAttr(switch_name + tx_attribute, lock=True, keyable=False, channelBox=False)
     cmds.setAttr(switch_name + ty_attribute, lock=True, keyable=False, channelBox=False)
     cmds.setAttr(switch_name + tz_attribute, lock=True, keyable=False, channelBox=False)
@@ -134,6 +116,43 @@ def main(wrist_joint):
     cmds.setAttr(switch_name + sy_attribute, lock=True, keyable=False, channelBox=False)
     cmds.setAttr(switch_name + sz_attribute, lock=True, keyable=False, channelBox=False)
 
+def position_switch(switch_name):
+    switch_ty = 2
+    point_const = cmds.pointConstraint(wrist_joint, switch_name, weight=1)[0]
+    cmds.delete(point_const)
+    cmds.select(switch_name)
+
+    # Se mueve el switch en el eje Y para separarlo un poco del joint de la muñeca.
+    cmds.setAttr(switch_name + ".ty", switch_ty)
+
+def create_switch_attributes(switch_name):
+    cmds.select(switch_name)
+    cmds.addAttr(ln="description", at="enum", en="1=IK,0=FK:")
+    cmds.setAttr(switch_name + ".description", edit=True, channelBox=True)
+    cmds.addAttr(ln="switch", at="long", min=0, max=1, dv=1)
+    cmds.setAttr(switch_name + ".switch", edit=True, keyable=True)
+    cmds.select(d=True)
+
+def main(wrist_joint):
+    print("Creating IK/FK switch.")
+
+    switch_name = "ikfk_switch"
+    loc = cmds.spaceLocator(name=switch_name)
+
+    print("Positioning IK/FK switch")
+    position_switch(switch_name)
+
+    print("Zeroing-out IK/FK switch")
+    zero_out(switch_name)
+
+    print("Parenting IK/FK switch to wrist joint")
+    cmds.pointConstraint(wrist_joint, switch_name, weight=1, maintainOffset=True)
+
+    print("Block and hide attributes of IK/FK switch")
+    block_and_hide_attrs(switch_name)
+
+    print("Creating switch attributes")
+    create_switch_attributes(switch_name)
 
 wrist_joint = cmds.ls(sl=True)[0]
 main(wrist_joint)
