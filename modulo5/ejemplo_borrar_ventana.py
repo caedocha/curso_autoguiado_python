@@ -10,10 +10,10 @@ import maya.cmds as cmds
 
 def delete_window_if_exists(window_name):
     # Se valida si la ventana ya ha sido creada anteriormente con
-    # la función `cmds.window` en modo de query(q) y el parámetro
+    # la función `cmds.window` en modo de `query(q)` y el parámetro
     # booleano `exists`.
     if(cmds.window(window_name, q=True, exists=True)):
-        # Si la ventana si existe, entonces se borra.
+        # Si la ventana existe, entonces se borra.
         print("Found old window from previous runs. Deleting it.")
         cmds.deleteUI(window_name, window=True)
 
@@ -26,8 +26,8 @@ def main():
     checkbox_name = "checkbox"
     window_name = "mainWindow"
 
-    # Antes de crear la interfaz gráfica, primero verifique que la ventana no
-    # exista por corridas anteriores del script. Pero si existe, bórrela para
+    # Antes de crear la interfaz gráfica, primero se verifica que la ventana no
+    # haya sido creada por corridas anteriores del script. Si existe, se borra para
     # comenzar desde cero.
     delete_window_if_exists(window_name)
 
@@ -35,7 +35,7 @@ def main():
     win = cmds.window(window_name, title="Simple UI",rtf=True)
 
     # Se crea un layout de columnas. Noten que para asoaciarlo a la ventana, al layout
-    # se le pasa el párametro parent(p) con el nombre de la ventana.
+    # se le pasa el párametro `parent(p)` con el nombre de la ventana.
     # Esto indica que layout va adentro de la ventana.
     layout = cmds.columnLayout(p=win, w=300, h=200,cat=("left",10),rs=10)
 

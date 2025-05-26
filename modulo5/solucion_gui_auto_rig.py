@@ -3,7 +3,7 @@
      TODOS LOS EJEMPLOS Y SOLUCIONES ESTÁN LISTOS PARA COPIAR Y PEGARSE EN EL SCRIPT EDITOR
 ****************************************************************************************************
 
-Solucion para crear una GUI para correr script que automatizan algunas partes del rig de un brazo.
+Solución para crear una GUI para correr script que automatizan algunas partes del rig de un brazo.
 """
 
 import maya.cmds as cmds
@@ -11,12 +11,12 @@ import maya.cmds as cmds
 def main():
     print("Creating auto-rig GUI")
 
-    # Variables con la configuracion de la ventana
+    # Variables con la configuración de la ventana
     window_title = "Arm Auto-rig"
     window_width = 370
     window_height = 200
 
-    # Variables con la configuracion de los botones
+    # Variables con la configuración de los botones
     button_width = 350
     button_height = 50
 

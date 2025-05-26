@@ -21,7 +21,7 @@ def create_empty_group(grp_name):
 
 def transfer_attributes(ctrl_name, grp_name):
     """
-    Transfer the attributes' values from the controller to the group.
+    Transfers the attributes' values from the controller to the group.
     """
     tx_attribute = ".translateX"
     ty_attribute = ".translateY"
@@ -84,7 +84,7 @@ def zero_out(ctrl_name):
 
 def create_controller(target_joint):
     """
-    Create FK controller using the target_joint's name.
+    Creates FK controller using the target_joint's name.
     """
     new_controller_name = target_joint + "_ctrl"
     print("================ Create controller for joint " + target_joint)
@@ -111,6 +111,7 @@ def block_and_hide_attributes(controller_name):
     Blocks and hides the scale and traslation attributes of the controller.
     """
     print("Blocking and hiding controller's scale and translation attributes")
+
     # Atributos de traslación
     tx_attribute = ".translateX"
     ty_attribute = ".translateY"
@@ -129,6 +130,9 @@ def block_and_hide_attributes(controller_name):
     cmds.setAttr(controller_name + sz_attribute, lock=True, keyable=False, channelBox=False)
 
 def setup_fk_controller(target_joint):
+    """
+    Creates and setups FK controller
+    """
     controller_name = create_controller(target_joint)
     move_controller_to_target(controller_name, target_joint)
     zero_out(controller_name)
@@ -137,6 +141,9 @@ def setup_fk_controller(target_joint):
     print("Done")
 
 def main(selected_joints):
+    """
+    Creates and setups FK controllers for every selected joint
+    """
     print("Selected joints are: " + str(selected_joints))
     for target_joint in selected_joints:
         print("Creating controlledor for joint " + target_joint)

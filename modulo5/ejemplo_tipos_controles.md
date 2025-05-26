@@ -49,7 +49,7 @@ main()
      TODOS LOS EJEMPLOS Y SOLUCIONES ESTÁN LISTOS PARA COPIAR Y PEGARSE EN EL SCRIPT EDITOR
 ****************************************************************************************************
 
-Ejemplo para crear una interfaz gráfica con un control de texto.
+Ejemplo para crear una interfaz gráfica con un mensaje de texto.
 """
 
 import maya.cmds as cmds
@@ -70,7 +70,7 @@ def main():
     #
     # CONTROLES
     #
-    cmds.text(p=layout, w=280, align="center", l="Mi texto de prueba", ww=True)
+    cmds.text(p=layout, w=370, align="center", l="Mi texto de prueba", ww=True)
 
     #
     # MOSTRAR VENTANA

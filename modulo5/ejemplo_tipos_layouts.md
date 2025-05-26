@@ -31,7 +31,7 @@ def main():
     button_width= 50
     button_height = 50
 
-    # Destruye la ventana si ya se habia corrido el script.
+    # Destruye la ventana si ya se había corrido el script.
     delete_window_if_exists(window_name)
 
     # Ventana
@@ -84,7 +84,7 @@ def main():
     button_height = 50
     can_window_resize = False
 
-    # Destruye la ventana si ya se habia corrido el script.
+    # Destruye la ventana si ya se había corrido el script.
     delete_window_if_exists(window_name)
 
     # Ventana
@@ -137,7 +137,7 @@ def main():
     button_height = 100
     can_window_resize = False
 
-    # Destruye la ventana si ya se habia corrido el script.
+    # Destruye la ventana si ya se había corrido el script.
     delete_window_if_exists(window_name)
 
     # Ventana

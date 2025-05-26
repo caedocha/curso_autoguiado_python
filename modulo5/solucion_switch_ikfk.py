@@ -94,6 +94,9 @@ def zero_out_main(*args):
 # ********************************* FUNCIONES CREAR SWITCH COMIENZAN AQUI *********************************
 #
 def block_and_hide_attrs(switch_name):
+    """
+    Blocks and hides the translation, rotation and scale attribute of the switch controller.
+    """
     # Atributos de traslación
     tx_attribute = ".translateX"
     ty_attribute = ".translateY"
@@ -120,23 +123,35 @@ def block_and_hide_attrs(switch_name):
     cmds.setAttr(switch_name + sz_attribute, lock=True, keyable=False, channelBox=False)
 
 def position_switch(switch_name):
+    """
+    Positions the switch controller on top of the wrist joint.
+    """
     switch_ty = 2
     point_const = cmds.pointConstraint(wrist_joint, switch_name, weight=1)[0]
     cmds.delete(point_const)
     cmds.select(switch_name)
 
-    # Se mueve el switch en el eje Y para separarlo un poco del joint de la muñeca.
+    # Se mueve el switch en el eje Y para separarlo, un poco, del joint de la muñeca.
     cmds.setAttr(switch_name + ".ty", switch_ty)
 
 def create_switch_attributes(switch_name):
+    """
+    Creates the switch controller's switch and description attributes.
+    """
     cmds.select(switch_name)
+    # El atributo de `description` es una ayuda visual para entender cómo función el switch.
     cmds.addAttr(ln="description", at="enum", en="1=IK,0=FK:")
     cmds.setAttr(switch_name + ".description", edit=True, channelBox=True)
+    # El atributo de `switch` es un número entero que solo acepta 1 ó 0.
     cmds.addAttr(ln="switch", at="long", min=0, max=1, dv=1)
     cmds.setAttr(switch_name + ".switch", edit=True, keyable=True)
     cmds.select(d=True)
 
 def create_switch_controller(*args):
+    """
+    Main function connected to the GUI.
+    Creates the switch controller based on the selected wrist joint.
+    """
     print("Creating IK/FK switch.")
 
     wrist_joint = cmds.ls(sl=True)[0]
@@ -167,26 +182,55 @@ def create_switch_controller(*args):
 #
 
 def connect_fk_weights_to_switch(switch_name, obj, attr):
+    """
+    Inversely connects the FK weight to the controller's switch attribute.
+    """
+    # El valor del atributo del `switch` se debe invertir para conectarlo a los pesos FK.
+    # Esto permite que cuando el `switch` está en 1, la cadena IK es la que controla
+    # y la cadena FK se apaga. Y cuando el `switch` está en 0, sucede lo contrario.
     print("Connecting FK weight to switch")
+
+    # Para obtener este comportamiento se debe invertir el valor del atributo de `switch`
+    # usando la siguiente fórmula `1 - x`, `x` siendo el valor del switch.
+    # Para hacerlo se crea un nodo de "plusMinusAverage" donde se resta el valor del `switch`
+    # a 1. El output del nodo es lo que se conecta al peso FK.
     plusMinusNode = cmds.shadingNode("plusMinusAverage", asUtility=True)
-    cmds.setAttr(plusMinusNode + ".operation", 2)
+
+    # La operación de resta tiene un valor númerico de 2.
+    minusOperation = 2
+    cmds.setAttr(plusMinusNode + ".operation", minusOperation)
     cmds.setAttr(plusMinusNode + ".input1D[0]", 1)
     cmds.connectAttr(switch_name + ".switch", plusMinusNode + ".input1D[1]")
     cmds.connectAttr(plusMinusNode + ".output1D", obj + "." + attr)
 
 def connect_ik_weights_to_switch(switch_name, obj, attr):
+    """
+    Directly connects the IK weight to the controller's switch attribute.
+    """
     print("Connecting IK weight to switch")
+
+    # En el caso del los pesos IK, el valor del `switch` se conecta directamente al peso IK.
     cmds.connectAttr(switch_name + ".switch", obj + "." + attr)
 
 def connect_constraints_to_switch(*args):
+    """
+    Connects the joints' contraints with the IK/FK switch controller.
+    """
     print("Connecting positive side of the switch to constraints")
     objs = cmds.ls(sl=True)
+
+    # Por convensión, el último valor de la lista de objetos es el controlador del switch.
     switch_name = objs[len(objs) - 1]
     for obj in objs:
+        # Una forma de filtrar los contraints es usando su tipo de nodo.
         if(cmds.nodeType(obj) == "parentConstraint"):
+            # Como no se sabe los nombres de los atributos de los pesos IK/FK, hay que buscarlos
+            # entre la lista de atributos.
             attrs = cmds.listAttr(obj)
             for attr in attrs:
                 attr_parts = attr.split("_")
+                # Por haber creado los parent contraints de la misma manera con otro script, el peso IK siempre termina
+                # con `ikW0` y el peso FK siempre termina en `fkW1`, podemos usar eso para encontrarlos.
                 if(attr_parts[len(attr_parts) - 1] == "ikW0"):
                     connect_ik_weights_to_switch(switch_name, obj, attr)
                 if(attr_parts[len(attr_parts) - 1] == "fkW1"):

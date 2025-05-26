@@ -21,7 +21,7 @@ def create_empty_group(grp_name):
 
 def transfer_attributes(ctrl_name, grp_name):
     """
-    Transfer the attributes' values from the controller to the group.
+    Transfers the attributes' values from the controller to the group.
     """
     tx_attribute = ".translateX"
     ty_attribute = ".translateY"
@@ -69,6 +69,9 @@ def zero_out_controller(ctrl_name):
     print("Zeroed-out controller's values")
 
 def zero_out(ctrl_name):
+    """
+    Zeros-out a controller.
+    """
     print("Controller " + ctrl_name + " selected ")
     grp_name = ctrl_name + "_grp"
     create_empty_group(grp_name)
@@ -95,6 +98,10 @@ def zero_out_main(*args):
 #
 
 def create_joint_chains_main(*args):
+    """
+    Main function connected to the GUI.
+    Creates joint chains based on manually places locators.
+    """
     print("Creating joint chains")
     side = "r"
     orientation = "xyz"
@@ -133,6 +140,9 @@ def create_joint_chains_main(*args):
 #
 
 def create_fk_controller(target_joint):
+    """
+    Creates, positions, zeros-out and blocks a new FK controller
+    """
     new_controller_name = target_joint + "_ctrl"
 
     # Atributos de traslación
@@ -168,6 +178,10 @@ def create_fk_controller(target_joint):
 
 
 def create_fk_controllers_main(*args):
+    """
+    Main function connected to the GUI.
+    Creates the FK controllers for each of the selected joints.
+    """
     print("Creating FK controllers")
     target_joints = cmds.ls(sl=True)
     for target_joint in target_joints:
@@ -183,6 +197,9 @@ def delete_window_if_exists(window_name):
         cmds.deleteUI(window_name, window=True)
 
 def create_gui(window_name):
+    """
+    Creates and displays the GUI
+    """
     print("Creating auto-rig GUI")
 
     # Variables con la configuración de la ventana
