@@ -69,6 +69,9 @@ def zero_out_controller(ctrl_name):
     print("Zeroed-out controller's values")
 
 def zero_out(ctrl_name):
+    """
+    Zeros-out a controller.
+    """
     print("Controller " + ctrl_name + " selected ")
     grp_name = ctrl_name + "_grp"
     create_empty_group(grp_name)
@@ -94,6 +97,9 @@ def zero_out_main(*args):
 # ********************************* FUNCIONES CREAR CADENAS DE JOINTS COMIENZAN AQUI *********************************
 #
 def create_joint_constraints(locators, side):
+    """
+    Creates the parent constraints between the IK and FK joints and the bind one.
+    """
     print("Creating parent constraints")
     for loc in locators:
         jnt = "jnt_" + side + "_" + loc
@@ -105,12 +111,18 @@ def create_joint_constraints(locators, side):
         cmds.parentConstraint(fk_jnt, bind_jnt)
 
 def orient_wrist_joint(wrist_jnt):
+    """
+    Orients the wrist joint using "Orient Joint to World" option.
+    """
     print("Orienting wrist joint")
     cmds.select(wrist_jnt)
     cmds.joint(edit=True, oj="none", ch=True, zso=True)
     cmds.select(cl=True)
 
 def orient_nonwrist_joints(non_wrist_joints):
+    """
+    Orients the non-wrist joints with a particular orientation.
+    """
     print("Orienting non-wrist joints")
     orientation = "xyz"
     secondaryAxisOrient = "yup"
@@ -119,6 +131,10 @@ def orient_nonwrist_joints(non_wrist_joints):
     cmds.select(cl=True)
 
 def create_joint_chains_main(*args):
+    """
+    Main function connected to the GUI.
+    Creates the IK, FK and bind joints based on manually-placed locators.
+    """
     print("Creating joint chains")
     side = "r"
     chain_types = ["ik", "fk", "bind"]
@@ -153,6 +169,9 @@ def create_joint_chains_main(*args):
 #
 
 def create_fk_controller(target_joint):
+    """
+    Creates a single FK controller.
+    """
     new_controller_name = target_joint + "_ctrl"
 
     # Atributos de traslación
@@ -188,6 +207,10 @@ def create_fk_controller(target_joint):
 
 
 def create_fk_controllers_main(*args):
+    """
+    Main function connected to the GUI.
+    Creates an FK controller per selected joint.
+    """
     print("Creating FK controllers")
     target_joints = cmds.ls(sl=True)
     for target_joint in target_joints:
@@ -202,6 +225,9 @@ def create_fk_controllers_main(*args):
 #
 
 def block_and_hide_ik_controllers(ik_controller, pole_vector_controller):
+    """
+    Blocks the IK controllers scale attributes.
+    """
     sx_attribute = ".scaleX"
     sy_attribute = ".scaleY"
     sz_attribute = ".scaleZ"
@@ -213,11 +239,18 @@ def block_and_hide_ik_controllers(ik_controller, pole_vector_controller):
     cmds.setAttr(pole_vector_controller + sz_attribute, lock=True, keyable=False, channelBox=False)
 
 def position_pole_vector_controller(elbow_joint, pole_vector_controller_group):
+    """
+    Positions the pole vector controller slightly behind the elbow joint.
+    """
     pointConst = cmds.pointConstraint(elbow_joint, pole_vector_controller_group, weight=1)[0]
     cmds.delete(pointConst)
     cmds.move(0,0,-2, pole_vector_controller_group, relative=True)
 
 def create_ik_rig(*args):
+    """
+    Main function connected to the GUI.
+    Creates the IK rig for a set of joints.
+    """
     print("Creating IK rig")
 
     joints = cmds.ls(sl=True)
@@ -275,6 +308,9 @@ def create_ik_rig(*args):
 #
 
 def block_and_hide_attrs(switch_name):
+    """
+    Blocks and hide the translation, rotation and scale attributes of the switch controller.
+    """
     # Atributos de traslación
     tx_attribute = ".translateX"
     ty_attribute = ".translateY"
@@ -301,15 +337,19 @@ def block_and_hide_attrs(switch_name):
     cmds.setAttr(switch_name + sz_attribute, lock=True, keyable=False, channelBox=False)
 
 def position_switch(switch_name):
+    """
+    Positions the switch controller on top of the wrist joint.
+    """
     switch_ty = 2
     point_const = cmds.pointConstraint(wrist_joint, switch_name, weight=1)[0]
     cmds.delete(point_const)
     cmds.select(switch_name)
-
-    # Se mueve el switch en el eje Y para separarlo un poco del joint de la muñeca.
     cmds.setAttr(switch_name + ".ty", switch_ty)
 
 def create_switch_attributes(switch_name):
+    """
+    Creates the `switch` and `description` attribute of the switch controller.
+    """
     cmds.select(switch_name)
     cmds.addAttr(ln="description", at="enum", en="1=IK,0=FK:")
     cmds.setAttr(switch_name + ".description", edit=True, channelBox=True)
@@ -318,6 +358,9 @@ def create_switch_attributes(switch_name):
     cmds.select(d=True)
 
 def create_switch_controller(*args):
+    """
+    Creates the switch controller on top of the wrist joint.
+    """
     print("Creating IK/FK switch.")
 
     wrist_joint = cmds.ls(sl=True)[0]
@@ -340,6 +383,9 @@ def create_switch_controller(*args):
     create_switch_attributes(switch_name)
 
 def connect_fk_to_switch(switch_name, obj, attr):
+    """
+    Inversely connects the switch attribute to the obj's attr.
+    """
     print("Connecting FK to switch")
     plusMinusNode = cmds.shadingNode("plusMinusAverage", asUtility=True)
     cmds.setAttr(plusMinusNode + ".operation", 2)
@@ -348,10 +394,17 @@ def connect_fk_to_switch(switch_name, obj, attr):
     cmds.connectAttr(plusMinusNode + ".output1D", obj + "." + attr)
 
 def connect_ik_to_switch(switch_name, obj, attr):
+    """
+    Directly connects the switch attribute to the obj's attr.
+    """
     print("Connecting IK to switch")
     cmds.connectAttr(switch_name + ".switch", obj + "." + attr)
 
 def connect_constraints_to_switch(*args):
+    """
+    Main function connected to the IK/FK switch GUI.
+    Connects the bind jonit's IK/FK weights to the switch controller.
+    """
     print("Connecting constraints to constraints")
     objs = cmds.ls(sl=True)
     switch_name = objs[len(objs) - 1]
@@ -366,6 +419,9 @@ def connect_constraints_to_switch(*args):
                     connect_fk_to_switch(switch_name, obj, attr)
 
 def connect_ik_controllers_to_switch(*args):
+    """
+    Connects the IK controllers' visibility to the switch.
+    """
     print("Connecting IK controllers to constraints")
     objs = cmds.ls(sl=True)
     switch_name = objs[len(objs) - 1]
@@ -375,6 +431,9 @@ def connect_ik_controllers_to_switch(*args):
             connect_ik_to_switch(switch_name, obj, "visibility")
 
 def connect_fk_controllers_to_switch(*args):
+    """
+    Connects the FK controllers' visibility to the switch.
+    """
     print("Connecting FK controllers to constraints")
     objs = cmds.ls(sl=True)
     switch_name = objs[len(objs) - 1]
@@ -384,13 +443,17 @@ def connect_fk_controllers_to_switch(*args):
             connect_fk_to_switch(switch_name, obj, "visibility")
 
 def create_ik_fk_switch_gui(*args):
+    """
+    Displays IK/FK switch GUI.
+    """
     print("Display IK/FK switch GUI")
-    # Variables con la configuracion de la ventana
+
+    # Variables con la configuración de la ventana
     window_title = "IK/FK Switch"
     window_width = 370
     window_height = 380
 
-    # Variables con la configuracion de los controles
+    # Variables con la configuración de los controles
     button_width = 350
     button_height = 50
     text_width = 350
@@ -426,6 +489,9 @@ def delete_window_if_exists(window_name):
         cmds.deleteUI(window_name, window=True)
 
 def create_gui(window_name):
+    """
+    Creates main GUI
+    """
     print("Creating auto-rig GUI")
 
     # Variables con la configuración de la ventana
@@ -462,6 +528,9 @@ def create_gui(window_name):
     print("Done")
 
 def main():
+    """
+    Main function, everything starts here!
+    """
     window_name = "autoRigWindow"
     delete_window_if_exists(window_name)
     create_gui(window_name)
