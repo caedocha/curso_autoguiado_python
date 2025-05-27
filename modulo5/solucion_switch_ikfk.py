@@ -190,18 +190,12 @@ def connect_fk_weights_to_switch(switch_name, obj, attr):
     # y la cadena FK se apaga. Y cuando el `switch` está en 0, sucede lo contrario.
     print("Connecting FK weight to switch")
 
-    # Para obtener este comportamiento se debe invertir el valor del atributo de `switch`
-    # usando la siguiente fórmula `1 - x`, `x` siendo el valor del switch.
-    # Para hacerlo se crea un nodo de "plusMinusAverage" donde se resta el valor del `switch`
-    # a 1. El output del nodo es lo que se conecta al peso FK.
-    plusMinusNode = cmds.shadingNode("plusMinusAverage", asUtility=True)
-
-    # La operación de resta tiene un valor númerico de 2.
-    minusOperation = 2
-    cmds.setAttr(plusMinusNode + ".operation", minusOperation)
-    cmds.setAttr(plusMinusNode + ".input1D[0]", 1)
-    cmds.connectAttr(switch_name + ".switch", plusMinusNode + ".input1D[1]")
-    cmds.connectAttr(plusMinusNode + ".output1D", obj + "." + attr)
+    # Para lograr este comportamiento se crea un `reverse node` que se va a conectar
+    # entre el atributo de `switch` y el peso FK. El nodo va a invertir el valor del switch.
+    # Va a convertir 1 a 0, y 0 a 1.
+    reverse_node = cmds.shadingNode("reverse", asUtility=True)
+    cmds.connectAttr(switch_name + ".switch", reverse_node + ".inputX")
+    cmds.connectAttr(reverse_node + ".outputX", obj + "." + attr)
 
 def connect_ik_weights_to_switch(switch_name, obj, attr):
     """

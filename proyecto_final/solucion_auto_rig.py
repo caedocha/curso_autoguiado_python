@@ -336,7 +336,7 @@ def block_and_hide_attrs(switch_name):
     cmds.setAttr(switch_name + sy_attribute, lock=True, keyable=False, channelBox=False)
     cmds.setAttr(switch_name + sz_attribute, lock=True, keyable=False, channelBox=False)
 
-def position_switch(switch_name):
+def position_switch(switch_name, wrist_joint):
     """
     Positions the switch controller on top of the wrist joint.
     """
@@ -368,7 +368,7 @@ def create_switch_controller(*args):
     loc = cmds.spaceLocator(name=switch_name)
 
     print("Positioning IK/FK switch")
-    position_switch(switch_name)
+    position_switch(switch_name, wrist_joint)
 
     print("Zeroing-out IK/FK switch")
     zero_out(switch_name)
@@ -387,11 +387,9 @@ def connect_fk_to_switch(switch_name, obj, attr):
     Inversely connects the switch attribute to the obj's attr.
     """
     print("Connecting FK to switch")
-    plusMinusNode = cmds.shadingNode("plusMinusAverage", asUtility=True)
-    cmds.setAttr(plusMinusNode + ".operation", 2)
-    cmds.setAttr(plusMinusNode + ".input1D[0]", 1)
-    cmds.connectAttr(switch_name + ".switch", plusMinusNode + ".input1D[1]")
-    cmds.connectAttr(plusMinusNode + ".output1D", obj + "." + attr)
+    reverse_node = cmds.shadingNode("reverse", asUtility=True)
+    cmds.connectAttr(switch_name + ".switch", reverse_node + ".inputX")
+    cmds.connectAttr(reverse_node + ".outputX", obj + "." + attr)
 
 def connect_ik_to_switch(switch_name, obj, attr):
     """
