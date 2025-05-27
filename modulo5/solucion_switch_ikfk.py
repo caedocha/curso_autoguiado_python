@@ -216,7 +216,7 @@ def connect_constraints_to_switch(*args):
     """
     Connects the joints' contraints with the IK/FK switch controller.
     """
-    print("Connecting positive side of the switch to constraints")
+    print("Connecting switch to constraints")
     objs = cmds.ls(sl=True)
 
     # Por convensión, el último valor de la lista de objetos es el controlador del switch.
