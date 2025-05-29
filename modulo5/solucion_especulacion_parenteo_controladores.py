@@ -115,6 +115,7 @@ def setup_fk_controller(target_joint):
     print("Done")
     return [controller_name, grp_name]
 
+# *************************************** AQUÍ SE CREA LA JERARQUÍA DE CONTROLADORES FK  ***************************************
 def create_controller_hierarchy(all_ctrls_and_grps):
     number_of_objs = len(all_ctrls_and_grps)
     for i in range(number_of_objs):
@@ -128,6 +129,7 @@ def create_controller_hierarchy(all_ctrls_and_grps):
                 print("Next obj: " + next_obj)
                 cmds.parent(next_obj, obj)
                 print("Parented " + next_obj + " to " + obj)
+# *************************************** AQUÍ SE CREA LA JERARQUÍA DE CONTROLADORES FK  ***************************************
 
 def main(selected_joints):
     print("Selected joints are: " + str(selected_joints))
