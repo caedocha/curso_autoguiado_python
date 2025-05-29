@@ -152,6 +152,9 @@ def create_joint_chains_main(*args):
             jnt_pos = (tx, ty, tz)
             jnt_name = "jnt_" + side + "_" + loc + "_" + type
             cmds.joint(n=jnt_name, p=jnt_pos)
+            if(type != "bind"):
+                print("Hiding: " + jnt_name)
+                cmds.setAttr(jnt_name + ".visibility", False)
             if(loc != "wrist"):
                 non_wrist_joints.append(jnt_name)
             else:
