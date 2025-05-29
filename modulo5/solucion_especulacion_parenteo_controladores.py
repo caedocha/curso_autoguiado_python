@@ -120,10 +120,14 @@ def create_controller_hierarchy(all_ctrls_and_grps):
     for i in range(number_of_objs):
         obj = all_ctrls_and_grps[i]
         parts = obj.split("_")
+        print("Current obj: " + obj)
         if(parts[len(parts) - 1] == "ctrl"):
-            next_obj = all_ctrls_and_grps[i + 1]
-            if(next_obj != ""):
+            next_index = i + 1
+            if(next_index < number_of_objs):
+                next_obj = all_ctrls_and_grps[next_index]
+                print("Next obj: " + next_obj)
                 cmds.parent(next_obj, obj)
+                print("Parented " + next_obj + " to " + obj)
 
 def main(selected_joints):
     print("Selected joints are: " + str(selected_joints))
