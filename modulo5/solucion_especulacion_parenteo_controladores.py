@@ -79,6 +79,7 @@ def zero_out(ctrl_name):
     cmds.parent(ctrl_name, grp_name)
     print("Parented controller under group")
     zero_out_controller(ctrl_name)
+    # El zero-out se modificó para que retornara el nombre del grupo.
     return grp_name
 
 # ************************************ FUNCIONES ZERO-OUT FINAL ***********************************
@@ -108,25 +109,47 @@ def constraint_joint_to_controller(ctrl, target_joint):
     cmds.orientConstraint(ctrl, target_joint)
 
 def setup_fk_controller(target_joint):
+    """
+    Sets up FK controller. Also creates contraints with the target joint.
+    """
     controller_name = create_controller(target_joint)
     move_controller_to_target(controller_name, target_joint)
     grp_name = zero_out(controller_name)
     constraint_joint_to_controller(controller_name, target_joint)
     print("Done")
+    # Se retorna una lista con los nombres del controlador y el grupo.
     return [controller_name, grp_name]
 
 # *************************************** AQUÍ SE CREA LA JERARQUÍA DE CONTROLADORES FK  ***************************************
 def create_controller_hierarchy(all_ctrls_and_grps):
+    """
+    Creates hierarchy of FK controllers.
+    """
+    # La lista de grupos y controladores luce algo similar a esto:
+    #            grupo             ,        controlador      ,         grupo            ,       controlador    ,           grupo          ,     controlador
+    # ['jnt_r_shoulder_fk_ctrl_grp', 'jnt_r_shoulder_fk_ctrl', 'jnt_r_elbow_fk_ctrl_grp', 'jnt_r_elbow_fk_ctrl', 'jnt_r_wrist_fk_ctrl_grp', 'jnt_r_wrist_fk_ctrl']
     number_of_objs = len(all_ctrls_and_grps)
+    print("Groups and FK controllers to create hierarchy:")
+    print(all_ctrls_and_grps)
+    # El ciclo recorre toda la lista de grupos y controladores para "parentear" cada grupo con el controlador que le antecede.
+    # Se utiliza la función `range` en vez de recorrer la lista directamente porque en cada iteración se debe buscar también
+    # el objeto que le sigue para poder hacer el "parent".
     for i in range(number_of_objs):
         obj = all_ctrls_and_grps[i]
         parts = obj.split("_")
         print("Current obj: " + obj)
+        # Solo se crea el "parent" si el objeto de la iteracién actual es un controlador.
         if(parts[len(parts) - 1] == "ctrl"):
+            # Obtiene el índice de la siguiente iteración.
             next_index = i + 1
+            # Verifica que exista un objeto en el siguiente índice.
+            # Si el próximo índice es mayor al total de objetos en la lista,
+            # quiere decir que el ciclo llegó al final y puede terminar.
             if(next_index < number_of_objs):
+                # Obtiene el siguiente objeto. En este caso se trata de un grupo.
                 next_obj = all_ctrls_and_grps[next_index]
                 print("Next obj: " + next_obj)
+                # "Parentea" el grupo con el controlador.
                 cmds.parent(next_obj, obj)
                 print("Parented " + next_obj + " to " + obj)
 # *************************************** AQUÍ SE CREA LA JERARQUÍA DE CONTROLADORES FK  ***************************************
