@@ -217,18 +217,18 @@ def connect_constraints_to_switch(*args):
     switch_name = objs[len(objs) - 1]
     for obj in objs:
         # Una forma de filtrar los contraints es usando su tipo de nodo.
-        if(cmds.nodeType(obj) == "parentConstraint"):
-            # Como no se sabe los nombres de los atributos de los pesos IK/FK, hay que buscarlos
-            # entre la lista de atributos.
-            attrs = cmds.listAttr(obj)
-            for attr in attrs:
-                attr_parts = attr.split("_")
-                # Por haber creado los parent contraints de la misma manera con otro script, el peso IK siempre termina
-                # con `ikW0` y el peso FK siempre termina en `fkW1`, podemos usar eso para encontrarlos.
-                if(attr_parts[len(attr_parts) - 1] == "ikW0"):
-                    connect_ik_weights_to_switch(switch_name, obj, attr)
-                if(attr_parts[len(attr_parts) - 1] == "fkW1"):
-                    connect_fk_weights_to_switch(switch_name, obj, attr)
+        obj_parts = obj.split("_")
+        # Solo conecta los atributos si es uno de los parent constraints.
+        # Si es el controlador del switch, se ignora.
+        if(obj_parts[len(obj_parts) - 1] == "parentConstraint1"):
+            side = obj_parts[1] # l, r
+            body_part = obj_parts[2] # shoulder, elbow, wrist
+            # Se arman los nombres de los pesos usando las convenciones de los nombres de
+            # los joints, constraints y pesos.
+            ik_weight = "jnt_" + side + "_" + body_part + "_ikW0"
+            fk_weight = "jnt_" + side + "_" + body_part + "_fkW1"
+            connect_ik_weights_to_switch(switch_name, obj, ik_weight)
+            connect_fk_weights_to_switch(switch_name, obj, fk_weight)
 
 #
 # ********************************* FUNCIONES PARA CONECTAR CONSTRAINTS AL SWITCH TERMINAN AQUI *********************************
