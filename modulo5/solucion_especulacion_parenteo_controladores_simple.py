@@ -96,8 +96,6 @@ def move_controller_to_target(ctrl, target_joint):
     Positions controller over the target joint using a temporary parent constraint.
     """
     print("Positioning controller")
-    print(ctrl)
-    print(target_joint)
     parent_const = cmds.parentConstraint(target_joint, ctrl, weight=1)[0]
     cmds.delete(parent_const)
 
@@ -125,18 +123,29 @@ def create_controller_hierarchy(selected_joints):
     """
     print("Creating FK controllers' hierarchy")
     number_of_joints = len(selected_joints)
+    # Se utiliza la función `range` en vez de iterar sobre la lista de joints directamente
+    # porque se debe conocer el joint actual y el próximo joint para poder armar las variables del nombre
+    # del controlador del joint actual y el grupo del controlador del próximo joint.
     for i in range(number_of_joints):
         current_joint = selected_joints[i]
         print("Current joint: " + current_joint)
         next_index = i + 1
+        # Se verifica que el próximo índice sea menor al total de joints.
+        # Esto quiere decir que el ciclo aún no ha llegado al final de la lista.
         if(next_index < number_of_joints):
+            # Obtiene el próximo joint.
             next_joint = selected_joints[next_index]
             print("Next joint: " + next_joint)
+            # Crea las variables del controlador actual y el próximo grupo.
+            # Se aprovecha las convenciones de los nombres de los objetos del rig
+            # para hacerlo.
             current_controller = current_joint + "_ctrl"
             next_group = next_joint + "_ctrl_grp"
+            # "Parentea" el grupo al controlador.
             cmds.parent(next_group, current_controller)
             print("Parented " + next_group + " to " + current_controller)
         else:
+            # Si llegó al final de la lista, se imprime un mensaje notificándolo.
             print("Reached last joint in the list, hierarchy completed")
     print("Created FK controllers' hierarchy")
 # *************************************** AQUÍ SE CREA LA JERARQUÍA DE CONTROLADORES FK  ***************************************
