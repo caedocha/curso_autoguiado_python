@@ -80,8 +80,6 @@ def zero_out(ctrl_name):
     print("Parented controller under group")
     zero_out_controller(ctrl_name)
 
-    return grp_name
-
 def zero_out_main(*args):
     """
     Main function where all the zeroing-out logic is grouped.
@@ -197,7 +195,7 @@ def create_fk_controller(target_joint):
     cmds.delete(parent_const)
 
     print("Zeroing-out controller")
-    grp_name = zero_out(new_controller_name)
+    zero_out(new_controller_name)
 
     print("Parenting joint to controller")
     cmds.orientConstraint(new_controller_name, target_joint)
@@ -210,21 +208,26 @@ def create_fk_controller(target_joint):
     cmds.setAttr(new_controller_name + sy_attribute, lock=True, keyable=False, channelBox=False)
     cmds.setAttr(new_controller_name + sz_attribute, lock=True, keyable=False, channelBox=False)
 
-    return [grp_name, new_controller_name]
-
-def create_controller_hierarchy(all_ctrls_and_grps):
-    number_of_objs = len(all_ctrls_and_grps)
-    for i in range(number_of_objs):
-        obj = all_ctrls_and_grps[i]
-        parts = obj.split("_")
-        print("Current obj: " + obj)
-        if(parts[len(parts) - 1] == "ctrl"):
-            next_index = i + 1
-            if(next_index < number_of_objs):
-                next_obj = all_ctrls_and_grps[next_index]
-                print("Next obj: " + next_obj)
-                cmds.parent(next_obj, obj)
-                print("Parented " + next_obj + " to " + obj)
+def create_controller_hierarchy(selected_joints):
+    """
+    Creates hierarchy of FK controllers.
+    """
+    print("Creating FK controllers' hierarchy")
+    number_of_joints = len(selected_joints)
+    for i in range(number_of_joints):
+        current_joint = selected_joints[i]
+        print("Current joint: " + current_joint)
+        next_index = i + 1
+        if(next_index < number_of_joints):
+            next_joint = selected_joints[next_index]
+            print("Next joint: " + next_joint)
+            current_controller = current_joint + "_ctrl"
+            next_group = next_joint + "_ctrl_grp"
+            cmds.parent(next_group, current_controller)
+            print("Parented " + next_group + " to " + current_controller)
+        else:
+            print("Reached last joint in the list, hierarchy completed")
+    print("Created FK controllers' hierarchy")
 
 def create_fk_controllers_main(*args):
     """
@@ -232,13 +235,10 @@ def create_fk_controllers_main(*args):
     Creates an FK controller per selected joint.
     """
     print("Creating FK controllers")
-    all_ctrls_and_grps = []
     target_joints = cmds.ls(sl=True)
     for target_joint in target_joints:
-        grp_and_controller = create_fk_controller(target_joint)
-        all_ctrls_and_grps.append(grp_and_controller[0])
-        all_ctrls_and_grps.append(grp_and_controller[1])
-    create_controller_hierarchy(all_ctrls_and_grps)
+        create_fk_controller(target_joint)
+    create_controller_hierarchy(target_joints)
 
 #
 # ********************************* FUNCIONES CREAR CONTROLADORES FK TERMINAN AQUI *********************************
