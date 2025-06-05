@@ -431,14 +431,14 @@ def connect_constraints_to_switch(*args):
     objs = cmds.ls(sl=True)
     switch_name = objs[len(objs) - 1]
     for obj in objs:
-        if(cmds.nodeType(obj) == "parentConstraint"):
-            attrs = cmds.listAttr(obj)
-            for attr in attrs:
-                attr_parts = attr.split("_")
-                if(attr_parts[len(attr_parts) - 1] == "ikW0"):
-                    connect_ik_to_switch(switch_name, obj, attr)
-                if(attr_parts[len(attr_parts) - 1] == "fkW1"):
-                    connect_fk_to_switch(switch_name, obj, attr)
+        obj_parts = obj.split("_")
+        if(obj_parts[len(obj_parts) - 1] == "parentConstraint1"):
+            side = obj_parts[1] # l, r
+            body_part = obj_parts[2] # shoulder, elbow, wrist
+            ik_weight = "jnt_" + side + "_" + body_part + "_ikW0"
+            fk_weight = "jnt_" + side + "_" + body_part + "_fkW1"
+            connect_ik_to_switch(switch_name, obj, ik_weight)
+            connect_fk_to_switch(switch_name, obj, fk_weight)
 
 def connect_ik_controllers_to_switch(*args):
     """
