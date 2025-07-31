@@ -365,10 +365,12 @@ def position_switch(switch_name, wrist_joint):
     Positions the switch controller on top of the wrist joint.
     """
     switch_ty = 2
-    point_const = cmds.pointConstraint(wrist_joint, switch_name, weight=1)[0]
+    ty_attribute = ".ty"
+    point_const = cmds.pointConstraint(wrist_joint, switch_name, weight=1, offset=(0,0,0))[0]
+    current_ty = cmds.getAttr(switch_name + ty_attribute)
     cmds.delete(point_const)
     cmds.select(switch_name)
-    cmds.setAttr(switch_name + ".ty", switch_ty)
+    cmds.setAttr(switch_name + ty_attribute, current_ty + switch_ty)
 
 def create_switch_attributes(switch_name):
     """
