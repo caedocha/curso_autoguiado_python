@@ -122,17 +122,19 @@ def block_and_hide_attrs(switch_name):
     cmds.setAttr(switch_name + sy_attribute, lock=True, keyable=False, channelBox=False)
     cmds.setAttr(switch_name + sz_attribute, lock=True, keyable=False, channelBox=False)
 
-def position_switch(switch_name):
+def position_switch(switch_name, wrist_joint):
     """
     Positions the switch controller on top of the wrist joint.
     """
     switch_ty = 2
-    point_const = cmds.pointConstraint(wrist_joint, switch_name, weight=1)[0]
+    ty_attribute = ".ty"
+    point_const = cmds.pointConstraint(wrist_joint, switch_name, weight=1, offset=(0,0,0))[0]
+    current_ty = cmds.getAttr(switch_name + ty_attribute)
     cmds.delete(point_const)
     cmds.select(switch_name)
 
     # Se mueve el switch en el eje Y para separarlo, un poco, del joint de la muñeca.
-    cmds.setAttr(switch_name + ".ty", switch_ty)
+    cmds.setAttr(switch_name + ty_attribute, current_ty + switch_ty)
 
 def create_switch_attributes(switch_name):
     """
@@ -159,7 +161,7 @@ def create_switch_controller(*args):
     loc = cmds.spaceLocator(name=switch_name)
 
     print("Positioning IK/FK switch")
-    position_switch(switch_name)
+    position_switch(switch_name, wrist_joint)
 
     print("Zeroing-out IK/FK switch")
     zero_out(switch_name)
