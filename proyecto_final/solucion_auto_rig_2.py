@@ -423,6 +423,19 @@ def create_switch_attributes(switch_name):
     cmds.setAttr(switch_name + ".switch", edit=True, keyable=True)
     cmds.select(d=True)
 
+def make_switch_controller_pretty(switch_name):
+    switch_shape_name = switch_name + "Shape"
+
+    # Atributos para cambiar el grosor y color de los controladores
+    line_width_attribute = ".lineWidth"
+    display_override_attribute = ".overrideEnabled"
+    color_override_attribute = ".overrideRGBColors"
+    colors_attribute = ".overrideColorRGB"
+
+    cmds.setAttr(switch_shape_name + display_override_attribute, 1)
+    cmds.setAttr(switch_shape_name + color_override_attribute, 1)
+    cmds.setAttr(switch_shape_name + colors_attribute, 0.2,0.8,0.2)
+
 def create_switch_controller(*args):
     """
     Creates the switch controller on top of the wrist joint.
@@ -447,6 +460,9 @@ def create_switch_controller(*args):
 
     print("Creating switch attributes")
     create_switch_attributes(switch_name)
+
+    print("Making switch controller pretty")
+    make_switch_controller_pretty(switch_name)
 
 def connect_fk_to_switch(switch_name, obj, attr):
     """
